@@ -1,6 +1,6 @@
 """
-ChronoFlow-AI // Simple, Modern & Smart Countdown Timer with 24/7 Corner Chatbot
-Designed for everyday users & power-focused professionals.
+ChronoFlow-AI // Simple, Modern & High-Contrast Countdown Timer with 24/7 Corner Chatbot
+Optimized for 100% visual clarity, readability and ease of use.
 """
 
 import re
@@ -12,89 +12,171 @@ import streamlit.components.v1 as components
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="ChronoFlow | Simple & Smart Countdown Timer",
+    page_title="ChronoFlow | Simple Countdown Timer",
     page_icon="⏱️",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
 
 # ---------------------------------------------------------
-# Modern, Clean & Simple CSS Styling
+# High-Contrast, Crystal Clear Styling (Light & Dark Safe)
 # ---------------------------------------------------------
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap');
 
-    /* Global Theme */
+    /* Global App Background & Base Typography */
     .stApp {
-        background: linear-gradient(180deg, #0b0f19 0%, #111827 100%);
-        color: #f3f4f6;
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #0b0f19 !important;
+        color: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
 
-    /* Main Container Card */
-    .main-card {
-        background: rgba(31, 41, 55, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(12px);
-        margin-bottom: 20px;
+    /* Force all text paragraphs, spans, labels to be crisp white / light */
+    p, span, h1, h2, h3, h4, h5, h6, li {
+        color: #f8fafc !important;
     }
 
-    /* Simple Header */
+    /* App Header */
     .app-header {
         text-align: center;
         margin-top: 10px;
-        margin-bottom: 24px;
+        margin-bottom: 22px;
     }
 
     .app-title {
-        font-size: 2.2rem;
-        font-weight: 800;
+        font-size: 2.3rem !important;
+        font-weight: 800 !important;
         letter-spacing: -0.02em;
-        margin-bottom: 6px;
-        background: linear-gradient(135deg, #ffffff 40%, #818cf8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        margin-bottom: 4px;
+        color: #ffffff !important;
     }
 
     .app-tagline {
-        color: #9ca3af;
-        font-size: 1rem;
+        color: #94a3b8 !important;
+        font-size: 1.05rem !important;
+        font-weight: 500;
         margin: 0;
     }
 
-    /* Buttons Styling */
-    .stButton>button {
-        border-radius: 12px;
-        font-weight: 600;
-        padding: 10px 18px;
-        transition: all 0.2s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    /* All Widget Labels (Hours, Minutes, Task Name, Notes) */
+    label, [data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] span {
+        color: #f1f5f9 !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
     }
 
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+    /* Input Boxes (Text input, Number input) - Solid Background with Crisp White Text */
+    input, textarea, [data-baseweb="input"] input, [data-baseweb="base-input"] input {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border: 1.5px solid #475569 !important;
+        border-radius: 10px !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
     }
 
-    /* Metrics Bar */
+    input:focus, textarea:focus, [data-baseweb="input"]:focus-within {
+        border-color: #818cf8 !important;
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3) !important;
+    }
+
+    input::placeholder, textarea::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+    }
+
+    /* Number Input Stepper Buttons (+ / -) */
+    button[data-testid="stNumberInputStepDown"], button[data-testid="stNumberInputStepUp"] {
+        color: #ffffff !important;
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+    }
+
+    /* Metric Cards */
     div[data-testid="stMetric"] {
-        background: rgba(17, 24, 39, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 14px;
-        padding: 12px 16px;
+        background-color: #1e293b !important;
+        border: 1.5px solid #334155 !important;
+        border-radius: 14px !important;
+        padding: 12px 18px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
     }
 
-    div[data-testid="stMetricValue"] {
-        color: #818cf8 !important;
-        font-weight: 700;
+    div[data-testid="stMetricLabel"] p {
+        color: #cbd5e1 !important;
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
     }
 
-    /* Floating Corner Chatbot Button (Bottom Right) */
+    div[data-testid="stMetricValue"] div {
+        color: #38bdf8 !important;
+        font-weight: 800 !important;
+        font-size: 1.4rem !important;
+    }
+
+    /* Streamlit Standard Buttons (Presets & Action buttons) */
+    .stButton > button {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        border: 1.5px solid #475569 !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        padding: 10px 16px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .stButton > button:hover {
+        background-color: #4f46e5 !important;
+        border-color: #6366f1 !important;
+        color: #ffffff !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4) !important;
+    }
+
+    /* Expander Container & Header */
+    [data-testid="stExpander"] {
+        background-color: #1e293b !important;
+        border: 1.5px solid #334155 !important;
+        border-radius: 16px !important;
+        margin-top: 14px !important;
+        overflow: hidden !important;
+    }
+
+    [data-testid="stExpander"] summary {
+        background-color: #1e293b !important;
+        padding: 12px 16px !important;
+    }
+
+    [data-testid="stExpander"] summary span, [data-testid="stExpander"] summary p {
+        color: #f8fafc !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+    }
+
+    /* Tabs Inside Expander */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #0f172a !important;
+        padding: 4px !important;
+        border-radius: 10px !important;
+        border: 1px solid #334155 !important;
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        color: #94a3b8 !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        padding: 8px 14px !important;
+    }
+
+    .stTabs [aria-selected="true"] {
+        background-color: #4f46e5 !important;
+        color: #ffffff !important;
+    }
+
+    /* FLOATING CORNER CHATBOT BUTTON (Fixed at Bottom-Right) */
     div[data-testid="stPopover"] {
         position: fixed !important;
         bottom: 24px !important;
@@ -104,12 +186,12 @@ st.markdown(
 
     div[data-testid="stPopover"] > button {
         border-radius: 50px !important;
-        padding: 14px 22px !important;
+        padding: 14px 24px !important;
         background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
         color: #ffffff !important;
-        font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.5), 0 0 15px rgba(124, 58, 237, 0.4) !important;
+        font-weight: 800 !important;
+        font-size: 1rem !important;
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.6), 0 0 15px rgba(124, 58, 237, 0.4) !important;
         border: none !important;
         display: inline-flex !important;
         align-items: center !important;
@@ -118,16 +200,46 @@ st.markdown(
     }
 
     div[data-testid="stPopover"] > button:hover {
-        transform: scale(1.05) !important;
-        box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.7) !important;
+        transform: scale(1.06) !important;
+        box-shadow: 0 15px 35px rgba(79, 70, 229, 0.8) !important;
     }
 
-    /* Chat bubble styling */
+    /* FLOATING CHATBOX WINDOW (Popover Body) */
+    div[data-testid="stPopoverBody"] {
+        background-color: #0f172a !important;
+        border: 2px solid #6366f1 !important;
+        border-radius: 20px !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75) !important;
+        padding: 18px !important;
+        color: #ffffff !important;
+        max-width: 420px !important;
+    }
+
+    div[data-testid="stPopoverBody"] p, div[data-testid="stPopoverBody"] span, div[data-testid="stPopoverBody"] div {
+        color: #f8fafc !important;
+    }
+
+    /* Chat Messages Inside Popover */
     .stChatMessage {
-        border-radius: 12px;
-        padding: 10px 14px;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
+        background-color: #1e293b !important;
+        border: 1px solid #334155 !important;
+        border-radius: 14px !important;
+        padding: 12px 14px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .stChatMessage p, .stChatMessage span {
+        color: #f8fafc !important;
+        font-size: 0.92rem !important;
+        line-height: 1.45 !important;
+    }
+
+    /* Chat input field inside popover */
+    div[data-testid="stPopoverBody"] input {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border: 1.5px solid #6366f1 !important;
     }
     </style>
     """,
@@ -140,7 +252,7 @@ st.markdown(
 if "total_seconds" not in st.session_state:
     st.session_state.total_seconds = 25 * 60  # Default 25m
 if "task_name" not in st.session_state:
-    st.session_state.task_name = "Study / Work Session"
+    st.session_state.task_name = "Study / Work"
 if "completed_count" not in st.session_state:
     st.session_state.completed_count = 0
 if "session_history" not in st.session_state:
@@ -151,7 +263,7 @@ if "chat_messages" not in st.session_state:
             "role": "assistant",
             "content": (
                 "👋 **Assalam o Alaikum! Main aapka 24/7 AI Assistant hoon.**\n\n"
-                "Aap mujhse timer use karne, study schedule banane, ya sound ke baare me kuch bhi aasaan zubaan me pooch sakte hain!"
+                "Aap mujhse timer use karne, study schedule banane, ya kisi bhi feature ke baare me pooch sakte hain!"
             ),
         }
     ]
@@ -191,7 +303,7 @@ def set_timer(seconds: int, task: str):
 
 
 # ---------------------------------------------------------
-# 24/7 Corner Chatbot Logic (Friendly & Simple)
+# 24/7 Corner Chatbot Knowledge
 # ---------------------------------------------------------
 def get_corner_chat_reply(query: str) -> str:
     q = query.lower().strip()
@@ -238,7 +350,7 @@ def get_corner_chat_reply(query: str) -> str:
 
 
 # ---------------------------------------------------------
-# App Header
+# App Header (High Visibility)
 # ---------------------------------------------------------
 st.markdown(
     """
@@ -251,7 +363,7 @@ st.markdown(
 )
 
 # ---------------------------------------------------------
-# Quick Stats (Clean & Friendly)
+# Quick Stats (Clean & High Contrast)
 # ---------------------------------------------------------
 s1, s2, s3 = st.columns(3)
 with s1:
@@ -261,12 +373,12 @@ with s2:
 with s3:
     st.metric("Assistant Status", "Online 🟢")
 
-st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 1-Click Fast Presets (Aam bande ke liye bilkul simple)
+# 1-Click Fast Presets (Large, High Contrast Buttons)
 # ---------------------------------------------------------
-st.markdown("<h4 style='text-align: center; font-size: 1.1rem; color: #9ca3af;'>⚡ Quick Presets (1-Click me time set karein)</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; font-size: 1.15rem; color: #f1f5f9; font-weight: 700; margin-bottom: 12px;'>⚡ Quick Presets (1-Click me time set karein)</h4>", unsafe_allow_html=True)
 p1, p2, p3, p4 = st.columns(4)
 
 with p1:
@@ -290,7 +402,7 @@ with p4:
         st.rerun()
 
 # ---------------------------------------------------------
-# Clean, Simple & Modern Circular Timer HUD
+# Clean, High-Contrast Circular Timer HUD
 # ---------------------------------------------------------
 hud_html = f"""
 <!DOCTYPE html>
@@ -309,7 +421,7 @@ hud_html = f"""
 
     body {{
         background: transparent;
-        color: #f8fafc;
+        color: #ffffff;
         font-family: 'Plus Jakarta Sans', sans-serif;
         display: flex;
         justify-content: center;
@@ -319,12 +431,12 @@ hud_html = f"""
 
     .timer-card {{
         width: 100%;
-        max-width: 540px;
+        max-width: 560px;
         background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 2px solid #334155;
         border-radius: 28px;
         padding: 26px 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -332,23 +444,23 @@ hud_html = f"""
     }}
 
     .task-badge {{
-        background: rgba(99, 102, 241, 0.15);
-        border: 1px solid rgba(99, 102, 241, 0.35);
-        color: #a5b4fc;
-        padding: 6px 16px;
+        background: rgba(99, 102, 241, 0.25);
+        border: 1.5px solid #818cf8;
+        color: #ffffff;
+        padding: 8px 20px;
         border-radius: 50px;
-        font-size: 0.88rem;
-        font-weight: 600;
+        font-size: 0.95rem;
+        font-weight: 700;
         margin-bottom: 16px;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
     }}
 
     .circle-wrap {{
         position: relative;
-        width: 250px;
-        height: 250px;
+        width: 260px;
+        height: 260px;
         margin: 6px 0 16px 0;
         display: flex;
         justify-content: center;
@@ -363,30 +475,30 @@ hud_html = f"""
 
     circle {{
         fill: none;
-        stroke-width: 12;
+        stroke-width: 13;
         stroke-linecap: round;
     }}
 
     .circle-bg {{
-        stroke: rgba(255, 255, 255, 0.08);
+        stroke: #334155;
     }}
 
     .circle-progress {{
         stroke: #6366f1;
-        stroke-dasharray: 722.5; /* 2 * PI * 115 */
+        stroke-dasharray: 753.9; /* 2 * PI * 120 */
         stroke-dashoffset: 0;
         transition: stroke-dashoffset 0.3s ease, stroke 0.3s ease;
-        filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+        filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6));
     }}
 
     .circle-progress.paused {{
         stroke: #f59e0b;
-        filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+        filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
     }}
 
     .circle-progress.completed {{
         stroke: #10b981;
-        filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.7));
+        filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8));
     }}
 
     .timer-readout {{
@@ -399,25 +511,26 @@ hud_html = f"""
 
     .time-digits {{
         font-family: 'JetBrains Mono', monospace;
-        font-size: 3.2rem;
+        font-size: 3.5rem;
         font-weight: 700;
         color: #ffffff;
         letter-spacing: -0.02em;
         line-height: 1;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }}
 
     .status-text {{
-        font-size: 0.82rem;
-        color: #94a3b8;
-        font-weight: 600;
-        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        font-weight: 700;
+        margin-top: 10px;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
     }}
 
     .controls-row {{
         display: flex;
-        gap: 12px;
+        gap: 14px;
         width: 100%;
         justify-content: center;
         margin-top: 10px;
@@ -425,11 +538,11 @@ hud_html = f"""
     }}
 
     button.btn-action {{
-        padding: 12px 24px;
+        padding: 14px 28px;
         border-radius: 14px;
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-weight: 700;
-        font-size: 0.95rem;
+        font-weight: 800;
+        font-size: 1rem;
         cursor: pointer;
         border: none;
         transition: all 0.2s ease;
@@ -441,7 +554,7 @@ hud_html = f"""
     button.btn-start {{
         background: #10b981;
         color: #ffffff;
-        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45);
     }}
 
     button.btn-start:hover {{
@@ -452,7 +565,7 @@ hud_html = f"""
     button.btn-pause {{
         background: #f59e0b;
         color: #ffffff;
-        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
     }}
 
     button.btn-pause:hover {{
@@ -461,36 +574,36 @@ hud_html = f"""
     }}
 
     button.btn-reset {{
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: #e2e8f0;
+        background: #334155;
+        border: 1.5px solid #475569;
+        color: #ffffff;
     }}
 
     button.btn-reset:hover {{
-        background: rgba(255, 255, 255, 0.15);
+        background: #475569;
         transform: translateY(-2px);
     }}
 
     .bumps-row {{
         display: flex;
         gap: 10px;
-        margin-top: 14px;
+        margin-top: 16px;
     }}
 
     button.btn-bump {{
-        padding: 8px 16px;
+        padding: 9px 18px;
         border-radius: 10px;
-        font-size: 0.82rem;
-        font-weight: 600;
-        background: rgba(99, 102, 241, 0.15);
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        color: #c7d2fe;
+        font-size: 0.88rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.25);
+        border: 1.5px solid #818cf8;
+        color: #ffffff;
         cursor: pointer;
         transition: all 0.2s ease;
     }}
 
     button.btn-bump:hover {{
-        background: rgba(99, 102, 241, 0.3);
+        background: rgba(99, 102, 241, 0.45);
         transform: translateY(-1px);
     }}
 </style>
@@ -504,9 +617,9 @@ hud_html = f"""
     </div>
 
     <div class="circle-wrap">
-        <svg viewBox="0 0 250 250">
-            <circle class="circle-bg" cx="125" cy="125" r="115"></circle>
-            <circle id="progressCircle" class="circle-progress" cx="125" cy="125" r="115"></circle>
+        <svg viewBox="0 0 260 260">
+            <circle class="circle-bg" cx="130" cy="130" r="120"></circle>
+            <circle id="progressCircle" class="circle-progress" cx="130" cy="130" r="120"></circle>
         </svg>
         <div class="timer-readout">
             <div id="timeDisplay" class="time-digits">--:--</div>
@@ -538,7 +651,7 @@ hud_html = f"""
     let isRunning = false;
     let timerId = null;
 
-    const CIRCLE_LENGTH = 2 * Math.PI * 115; // 722.56
+    const CIRCLE_LENGTH = 2 * Math.PI * 120; // 753.98
     const circle = document.getElementById('progressCircle');
     const display = document.getElementById('timeDisplay');
     const statusLabel = document.getElementById('statusLabel');
@@ -642,7 +755,7 @@ hud_html = f"""
         btnIcon.innerText = "▶";
         btnText.innerText = "START";
         statusLabel.innerText = "READY";
-        statusLabel.style.color = "#94a3b8";
+        statusLabel.style.color = "#cbd5e1";
         update();
     }}
 
@@ -658,10 +771,10 @@ hud_html = f"""
 </html>
 """
 
-components.html(hud_html, height=440, scrolling=False)
+components.html(hud_html, height=450, scrolling=False)
 
 # ---------------------------------------------------------
-# Custom Time Input (Aam bande ke liye simple)
+# Custom Time Input (High Contrast, Crystal Clear)
 # ---------------------------------------------------------
 with st.expander("🛠️ Custom Time Set Karein (Apni marzi ka waqt)", expanded=False):
     t_tab1, t_tab2 = st.tabs(["🔢 Number Input", "✍️ Likh Kar Set Karein"])
@@ -697,9 +810,9 @@ with st.expander("🛠️ Custom Time Set Karein (Apni marzi ka waqt)", expanded
                 st.rerun()
 
 # ---------------------------------------------------------
-# Completed Session Logger
+# Completed Session Logger (Clear & Legible)
 # ---------------------------------------------------------
-st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 with st.container():
     col_l1, col_l2 = st.columns([3, 1])
     with col_l1:
@@ -719,18 +832,18 @@ with st.container():
             st.rerun()
 
 # ---------------------------------------------------------
-# FLOATING CORNER CHATBOT (Bottom Right Website-Style Widget)
+# FLOATING CORNER CHATBOT (Bottom-Right Website Widget)
 # ---------------------------------------------------------
 with st.popover("💬 Chat Support (24/7)", use_container_width=False):
     st.markdown(
         """
-        <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px;">
-            <div style="font-weight: 700; font-size: 1.05rem; color: #818cf8; display: flex; align-items: center; gap: 8px;">
+        <div style="border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 14px;">
+            <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff !important; display: flex; align-items: center; gap: 8px;">
                 <span>💬</span>
-                <span>ChronoFlow Assistant</span>
-                <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 999px;">● Online</span>
+                <span style="color: #ffffff !important;">ChronoFlow Assistant</span>
+                <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; color: #10b981 !important; padding: 2px 8px; border-radius: 999px;">● Online</span>
             </div>
-            <p style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">
+            <p style="font-size: 0.85rem; color: #cbd5e1 !important; margin: 4px 0 0 0;">
                 Main aapka 24/7 live helper hoon. Kuch bhi poochein!
             </p>
         </div>
@@ -756,11 +869,11 @@ with st.popover("💬 Chat Support (24/7)", use_container_width=False):
             st.session_state.chat_messages.append({"role": "assistant", "content": ans})
             st.rerun()
 
-    # Chat Messages Box
+    # Chat Messages Box (High Contrast)
     with st.container(height=260):
         for msg in st.session_state.chat_messages:
             with st.chat_message(msg["role"]):
-                st.write(msg["content"])
+                st.markdown(f"<div style='color: #ffffff !important; font-weight: 500;'>{msg['content']}</div>", unsafe_allow_html=True)
 
     # Chat Form Input
     with st.form("corner_chat_form", clear_on_submit=True):
@@ -785,7 +898,7 @@ with st.popover("💬 Chat Support (24/7)", use_container_width=False):
 # ---------------------------------------------------------
 st.markdown(
     """
-    <div style="text-align: center; margin-top: 30px; padding: 16px; color: #6b7280; font-size: 0.82rem;">
+    <div style="text-align: center; margin-top: 30px; padding: 16px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">
         <span>ChronoFlow Timer &bull; Simple, Modern & Fast</span>
     </div>
     """,
