@@ -1,187 +1,133 @@
 """
-AETHR-CHRONOS // ChronoFlow-AI: Modern Agentic AI Temporal Orchestrator & 24/7 Live Support Agent
-Created by an Agentic AI Developer.
+ChronoFlow-AI // Simple, Modern & Smart Countdown Timer with 24/7 Corner Chatbot
+Designed for everyday users & power-focused professionals.
 """
 
-import os
 import re
-import json
 import datetime
 import streamlit as st
 import streamlit.components.v1 as components
 
 # ---------------------------------------------------------
-# Page Configuration & Agentic Design System
+# Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="ChronoFlow-AI | Agentic Temporal AI & 24/7 Support",
+    page_title="ChronoFlow | Simple & Smart Countdown Timer",
     page_icon="⏱️",
-    layout="wide",
-    initial_sidebar_state="expanded",
+    layout="centered",
+    initial_sidebar_state="collapsed",
 )
 
-# Custom Agentic Cyberpunk / Dark Glassmorphism CSS
+# ---------------------------------------------------------
+# Modern, Clean & Simple CSS Styling
+# ---------------------------------------------------------
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
 
-    :root {
-        --agent-cyan: #00f5d4;
-        --agent-purple: #7928ca;
-        --agent-blue: #0070f3;
-        --agent-bg: #090d16;
-        --agent-card: rgba(16, 24, 40, 0.75);
-        --agent-border: rgba(0, 245, 212, 0.25);
-    }
-
+    /* Global Theme */
     .stApp {
-        background: radial-gradient(circle at 10% 20%, rgba(121, 40, 202, 0.15) 0%, transparent 40%),
-                    radial-gradient(circle at 90% 80%, rgba(0, 245, 212, 0.12) 0%, transparent 45%),
-                    #070a12;
-        color: #e2e8f0;
-        font-family: 'Space Grotesk', sans-serif;
+        background: linear-gradient(180deg, #0b0f19 0%, #111827 100%);
+        color: #f3f4f6;
+        font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Custom Header Banner */
-    .agent-header {
-        background: linear-gradient(135deg, rgba(16, 24, 40, 0.85) 0%, rgba(9, 13, 22, 0.95) 100%);
-        border: 1px solid var(--agent-border);
-        border-radius: 16px;
+    /* Main Container Card */
+    .main-card {
+        background: rgba(31, 41, 55, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
         padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 8px 32px 0 rgba(0, 245, 212, 0.08);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(12px);
-        position: relative;
-        overflow: hidden;
+        margin-bottom: 20px;
     }
 
-    .agent-header::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #00f5d4, #7928ca, #0070f3, #00f5d4);
-        background-size: 300% 100%;
-        animation: borderShift 6s linear infinite;
+    /* Simple Header */
+    .app-header {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 24px;
     }
 
-    @keyframes borderShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    .agent-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(0, 245, 212, 0.1);
-        border: 1px solid rgba(0, 245, 212, 0.35);
-        border-radius: 9999px;
-        padding: 4px 14px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.78rem;
-        color: #00f5d4;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
-
-    .pulse-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #00f5d4;
-        box-shadow: 0 0 10px #00f5d4;
-        animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    .agent-title {
-        font-size: 2.1rem;
+    .app-title {
+        font-size: 2.2rem;
         font-weight: 800;
         letter-spacing: -0.02em;
-        margin-top: 10px;
-        margin-bottom: 4px;
-        background: linear-gradient(135deg, #ffffff 40%, #00f5d4 100%);
+        margin-bottom: 6px;
+        background: linear-gradient(135deg, #ffffff 40%, #818cf8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    .agent-subtitle {
-        color: #94a3b8;
-        font-size: 0.95rem;
+    .app-tagline {
+        color: #9ca3af;
+        font-size: 1rem;
+        margin: 0;
     }
 
-    /* Metric Cards */
-    div[data-testid="stMetric"] {
-        background: rgba(15, 23, 42, 0.65);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 14px 18px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    }
-
-    div[data-testid="stMetricLabel"] {
-        font-family: 'JetBrains Mono', monospace;
-        color: #94a3b8 !important;
-        font-size: 0.8rem !important;
-    }
-
-    div[data-testid="stMetricValue"] {
-        font-family: 'JetBrains Mono', monospace;
-        color: #00f5d4 !important;
-        font-weight: 700;
-    }
-
-    /* Primary and Secondary Buttons */
+    /* Buttons Styling */
     .stButton>button {
-        border-radius: 10px;
-        font-family: 'JetBrains Mono', monospace;
+        border-radius: 12px;
         font-weight: 600;
-        transition: all 0.25s ease;
+        padding: 10px 18px;
+        transition: all 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .stButton>button:hover {
-        border-color: #00f5d4;
-        box-shadow: 0 0 14px rgba(0, 245, 212, 0.35);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
     }
 
-    /* Tab Styling */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background-color: rgba(15, 23, 42, 0.5);
-        padding: 6px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .stTabs [data-baseweb="tab"] {
-        border-radius: 8px;
-        padding: 8px 18px;
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: 600;
-        color: #94a3b8;
-    }
-
-    .stTabs [aria-selected="true"] {
-        background-color: rgba(0, 245, 212, 0.15) !important;
-        color: #00f5d4 !important;
-        border: 1px solid rgba(0, 245, 212, 0.3);
-    }
-
-    /* Chat bubble enhancements */
-    .stChatMessage {
+    /* Metrics Bar */
+    div[data-testid="stMetric"] {
+        background: rgba(17, 24, 39, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        padding: 12px;
-        margin-bottom: 10px;
-        background: rgba(15, 23, 42, 0.6);
+        padding: 12px 16px;
+    }
+
+    div[data-testid="stMetricValue"] {
+        color: #818cf8 !important;
+        font-weight: 700;
+    }
+
+    /* Floating Corner Chatbot Button (Bottom Right) */
+    div[data-testid="stPopover"] {
+        position: fixed !important;
+        bottom: 24px !important;
+        right: 24px !important;
+        z-index: 999999 !important;
+    }
+
+    div[data-testid="stPopover"] > button {
+        border-radius: 50px !important;
+        padding: 14px 22px !important;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.5), 0 0 15px rgba(124, 58, 237, 0.4) !important;
+        border: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        transition: all 0.25s ease !important;
+    }
+
+    div[data-testid="stPopover"] > button:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.7) !important;
+    }
+
+    /* Chat bubble styling */
+    .stChatMessage {
+        border-radius: 12px;
+        padding: 10px 14px;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
     }
     </style>
     """,
@@ -189,981 +135,658 @@ st.markdown(
 )
 
 # ---------------------------------------------------------
-# State Initialization
+# State Management
 # ---------------------------------------------------------
 if "total_seconds" not in st.session_state:
-    st.session_state.total_seconds = 25 * 60  # Default 25m Pomodoro
+    st.session_state.total_seconds = 25 * 60  # Default 25m
 if "task_name" not in st.session_state:
-    st.session_state.task_name = "Deep Work: Core Autonomous Logic"
-if "session_history" not in st.session_state:
-    st.session_state.session_history = []
+    st.session_state.task_name = "Study / Work Session"
 if "completed_count" not in st.session_state:
     st.session_state.completed_count = 0
-if "streak_count" not in st.session_state:
-    st.session_state.streak_count = 1
-if "timer_trigger_token" not in st.session_state:
-    st.session_state.timer_trigger_token = 0
-
-# Chatbot conversation state (24/7 Live Support)
+if "session_history" not in st.session_state:
+    st.session_state.session_history = []
 if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = [
         {
             "role": "assistant",
             "content": (
-                "👋 **Greetings! I am ChronoFlow AI (24/7 Customer Support & Mission Assistant).**\n\n"
-                "I have complete knowledge of this project. Ask me anything about:\n"
-                "- ⏱️ **Timer Controls & Presets** (Deep Flow, Hyper Sprint, Recharge)\n"
-                "- 🤖 **Natural Language Commands** (e.g. *'45m study session'*)\n"
-                "- 🔊 **Web Audio Synthesis & Ambience**\n"
-                "- 💡 **Deep Work & Focus Optimization Advice**\n"
-                "- 🛠️ **Troubleshooting & Technical Support**\n\n"
-                "*How can I assist your mission today?*"
+                "👋 **Assalam o Alaikum! Main aapka 24/7 AI Assistant hoon.**\n\n"
+                "Aap mujhse timer use karne, study schedule banane, ya sound ke baare me kuch bhi aasaan zubaan me pooch sakte hain!"
             ),
         }
     ]
 
 
 # ---------------------------------------------------------
-# Natural Language Parser (Agentic Feature)
+# Helper Functions
 # ---------------------------------------------------------
-def parse_natural_language_command(user_prompt: str) -> tuple[int, str]:
-    """
-    Agentic parser extracting duration (hours, minutes, seconds)
-    and mission objective from natural language.
-    """
-    text = user_prompt.strip().lower()
-    total_secs = 0
+def parse_simple_time_text(text: str) -> tuple[int, str]:
+    """Parse text like '25m study' or '10 min break'"""
+    t = text.lower().strip()
+    secs = 0
+    h = re.search(r"(\d+)\s*(?:h|hr|hour|hours)", t)
+    m = re.search(r"(\d+)\s*(?:m|min|minute|minutes)", t)
+    s = re.search(r"(\d+)\s*(?:s|sec|second|seconds)", t)
+    if h:
+        secs += int(h.group(1)) * 3600
+    if m:
+        secs += int(m.group(1)) * 60
+    if s:
+        secs += int(s.group(1))
 
-    hr_match = re.search(r"(\d+)\s*(?:h|hr|hrs|hours?)\b", text)
-    if hr_match:
-        total_secs += int(hr_match.group(1)) * 3600
+    if secs == 0:
+        raw = re.search(r"^(\d+)$", t)
+        if raw:
+            secs = int(raw.group(1)) * 60
 
-    min_match = re.search(r"(\d+)\s*(?:m|min|mins|minutes?)\b", text)
-    if min_match:
-        total_secs += int(min_match.group(1)) * 60
-
-    sec_match = re.search(r"(\d+)\s*(?:s|sec|secs|seconds?)\b", text)
-    if sec_match:
-        total_secs += int(sec_match.group(1))
-
-    if total_secs == 0:
-        raw_num = re.search(r"^(\d+)$", text)
-        if raw_num:
-            total_secs = int(raw_num.group(1)) * 60
-
-    cleaned = re.sub(
-        r"\b(?:\d+\s*(?:h|hr|hrs|hours?|m|min|mins|minutes?|s|sec|secs|seconds?))\b",
-        "",
-        user_prompt,
-        flags=re.IGNORECASE,
-    )
-    cleaned = re.sub(r"\b(?:timer|set|for|start|countdown|please)\b", "", cleaned, flags=re.IGNORECASE)
-    cleaned = re.sub(r"[\s,:;\-]+", " ", cleaned).strip()
-
-    task_desc = cleaned.capitalize() if cleaned else "Autonomous Focus Protocol"
-    return (total_secs if total_secs > 0 else 25 * 60, task_desc)
+    cleaned = re.sub(r"\b(?:\d+\s*(?:h|hr|hours?|m|min|minutes?|s|sec|seconds?))\b", "", text, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\b(?:timer|set|for|start|countdown|please)\b", "", cleaned, flags=re.IGNORECASE).strip()
+    task = cleaned.capitalize() if cleaned else "Work / Study"
+    return (secs if secs > 0 else 25 * 60, task)
 
 
-# ---------------------------------------------------------
-# 24/7 AI Knowledge Base & Customer Support Engine
-# ---------------------------------------------------------
-PROJECT_KNOWLEDGE = {
-    "name": "ChronoFlow-AI (AETHR-CHRONOS)",
-    "description": "Agentic AI Temporal & Focus Orchestrator with 60 FPS non-blocking HUD, Web Audio synthesis, and NLP parsing.",
-    "version": "1.0.0",
-    "developer": "Agentic AI Developer",
-    "presets": {
-        "Deep Flow": "25 minutes (Pomodoro standard) for high-cognitive tasks, coding, and model training.",
-        "Hyper Sprint": "15 minutes high-intensity interval for rapid debugging, quick problem solving, or hotfixes.",
-        "Synaptic Recharge": "5 minutes mental break, hydration, physical stretch.",
-        "Macro Flow": "50 minutes prolonged flow-state for system architecture and writing.",
-    },
-    "features": [
-        "60 FPS SVG Animated Circular Progress Ring",
-        "Non-blocking client-side timer (no time.sleep freezes)",
-        "Zero-dependency Web Audio API harmonic alert chimes",
-        "Synthesized Cyberpunk Brown Noise ambient sound",
-        "Natural language command dispatcher",
-        "Session telemetry, streak tracker, and mission archiver",
-        "24/7 Built-in AI Customer Support Agent",
-    ],
-}
-
-
-def query_24_7_support_agent(query: str) -> str:
-    """
-    High-availability 24/7 Autonomous Customer Support Engine.
-    Equipped with complete project documentation, troubleshooting steps,
-    productivity science, and multilingual (English + Roman Urdu) support.
-    """
-    q = query.lower().strip()
-
-    # Greetings
-    if any(k in q for k in ["hello", "hi", "hey", "salam", "assalam", "kese ho", "kaise ho", "help"]):
-        return (
-            "👋 **Hello! Welcome to ChronoFlow-AI 24/7 Support Desk!**\n\n"
-            "Main aapka 24/7 AI Mission Assistant hoon. Aap mujhse is project ke kisi bhi feature, "
-            "troubleshooting, ya focus techniques ke baare me pooch sakte hain.\n\n"
-            "**Quick questions you can ask me:**\n"
-            "1. *'How to set a timer using natural language?'*\n"
-            "2. *'Why is the audio/alarm not making sound?'*\n"
-            "3. *'What are the tactical presets?'*\n"
-            "4. *'Best focus routine for coding/study?'*\n"
-            "5. *'Who developed this project?'*"
-        )
-
-    # Audio Troubleshooting
-    if any(k in q for k in ["sound", "audio", "alarm", "chime", "voice", "beep", "awaaz"]):
-        return (
-            "🔊 **Audio & Sound Synthesis Guide:**\n\n"
-            "- **Zero External Files:** Audio is generated dynamically inside your browser using the **Web Audio API** (Oscillators & Biquad Filters).\n"
-            "- **Troubleshooting:** Browser security policies mandate that the user interact with the page (click 'Start Mission' or toggle a button) before audio can play.\n"
-            "- **Ambient Noise:** You can toggle the 'Cyberpunk Focus Ambience' checkbox in the sidebar to play soothing Brown Noise while working.\n"
-            "- **Volume/Mute:** Sidebar me 'Enable Chimes & Alarms' ka toggle hai jise aap on/off kar sakte hain."
-        )
-
-    # NLP / Natural Language Commands
-    if any(k in q for k in ["natural language", "nlp", "command", "prompt", "text input", "likh kar"]):
-        return (
-            "🤖 **Natural Language Mission Dispatcher:**\n\n"
-            "Aap seedha plain English me timer set kar sakte hain! For example:\n"
-            "- `25m deep work on neural network` ➔ Sets 25 mins & labels task.\n"
-            "- `1h 30m code review` ➔ Sets 90 mins.\n"
-            "- `45s eye relaxation` ➔ Sets 45 seconds.\n"
-            "- `10 min chai break` ➔ Sets 10 minutes.\n\n"
-            "System duration regex patterns (h/m/s) se auto-extract kar leta hai aur task ko HUD par load kar deta hai!"
-        )
-
-    # Presets & Focus Modes
-    if any(k in q for k in ["preset", "pomodoro", "deep flow", "hyper sprint", "recharge", "modes"]):
-        return (
-            "⚡ **Tactical Presets Available:**\n\n"
-            "1. **🧠 Deep Flow (25m):** Classic Pomodoro interval. Perfect for deep focus, coding, and writing.\n"
-            "2. **⚡ Hyper Sprint (15m):** Short high-adrenaline sprint for quick bug fixes or inbox clearing.\n"
-            "3. **☕ Synaptic Recharge (5m):** Rest interval for eye relaxation, water, and stretching.\n"
-            "4. **🚀 Macro Flow (50m):** Extended 50-minute block for large system design or architecture.\n\n"
-            "Aap 1-click preset buttons daba kar turant timer apply kar sakte hain!"
-        )
-
-    # Timer Controls (Pause, Resume, Reset)
-    if any(k in q for k in ["pause", "resume", "reset", "stop", "freeze", "bug", "controls"]):
-        return (
-            "⏱️ **Timer Controls & Architecture:**\n\n"
-            "- **No UI Freeze:** Previous version me `time.sleep(1)` server ko block karta tha. Current version me timer **Client-side JavaScript + SVG Ring** par 60 FPS chalta hai.\n"
-            "- **Controls:**\n"
-            "  - `START / RESUME`: Timer shuru ya continue karta hai.\n"
-            "  - `PAUSE`: Instant pause karta hai without losing milliseconds.\n"
-            "  - `RESET`: Total duration par reset karta hai.\n"
-            "  - `+1m / +5m / +10m`: Rapid time bump buttons time barhane ke liye."
-        )
-
-    # Productivity / Study / Work Advice
-    if any(k in q for k in ["study", "routine", "productive", "focus", "tips", "technique"]):
-        return (
-            "💡 **Agentic AI Focus Recommendations:**\n\n"
-            "1. **25/5 Rule (Pomodoro Protocol):** 25 min Deep Flow ➔ 5 min Synaptic Recharge. 4 cycles ke baad 20 min ka lamba break lein.\n"
-            "2. **Single-Tasking:** Task input me ek waqt me sirf ek objective likhein (e.g. *'Implement User Authentication'*).\n"
-            "3. **Ambient Sound:** Browser ka ambient brown noise on karein taake background distractions eliminate ho sakein.\n"
-            "4. **Telemetry:** Har session complete hone par 'Record Session to History' button dabayein taake aapka daily streak barhta rahe!"
-        )
-
-    # Developer / Project Info / GitHub
-    if any(k in q for k in ["github", "developer", "creator", "repo", "author", "kisne banaya"]):
-        return (
-            "🚀 **Project Information:**\n\n"
-            "- **Project Name:** ChronoFlow-AI (AETHR-CHRONOS)\n"
-            "- **Architect:** Built by an **Agentic AI Developer**\n"
-            "- **GitHub Repository:** [github.com/SainBux-HadiSeelro/chronoflow-ai](https://github.com/SainBux-HadiSeelro/chronoflow-ai)\n"
-            "- **Tech Stack:** Python 3.12, Streamlit 1.42+, Web Audio API, SVG 60FPS HUD, NLP regex extraction."
-        )
-
-    # Default Intelligent Response
-    return (
-        f"🤖 **ChronoFlow AI Agent:**\n\n"
-        f"Aapne poocha: *\"{query}\"*\n\n"
-        f"ChronoFlow-AI ek autonomous temporal focus system hai. Aap top navigation me:\n"
-        f"1. **⏱️ Mission Control HUD** tab me timer control kar sakte hain.\n"
-        f"2. Natural language me likh kar mission set kar sakte hain (e.g., `'25m coding'` ya `'10m break'`).\n"
-        f"3. Audio chimes aur cyberpunk ambience enable kar sakte hain.\n\n"
-        f"Agar aapka koi specific customer support ya technical sawal hai to mujhe batayein, main 24/7 available hoon!"
-    )
-
-
-# ---------------------------------------------------------
-# Preset Handlers
-# ---------------------------------------------------------
-def apply_preset(seconds: int, task: str):
+def set_timer(seconds: int, task: str):
     st.session_state.total_seconds = seconds
     st.session_state.task_name = task
-    st.session_state.timer_trigger_token += 1
 
 
 # ---------------------------------------------------------
-# Sidebar Controls & Agentic Telemetry
+# 24/7 Corner Chatbot Logic (Friendly & Simple)
 # ---------------------------------------------------------
-with st.sidebar:
-    st.markdown("### 🛰️ **Agent Telemetry**")
-    st.markdown(
-        """
-        <div style="background: rgba(0,245,212,0.06); border: 1px solid rgba(0,245,212,0.2); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #00f5d4;">
-                AGENT: AETHR-COGNITION v2.4<br>
-                STATUS: 24/7 ONLINE & ACTIVE<br>
-                SUPPORT AGENT: READY<br>
-                DRIFT CORRECTION: ENABLED<br>
-                AUDIO SYNTHESIS: WEB-AUDIO 2.0
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+def get_corner_chat_reply(query: str) -> str:
+    q = query.lower().strip()
+
+    if any(k in q for k in ["salam", "hello", "hi", "hey", "kese", "kaise", "hal"]):
+        return (
+            "👋 **Walaikum Assalam!**\n\n"
+            "Main theek hoon! Aap batayein main aapki timer ya study session me kya madad kar sakta hoon?\n\n"
+            "- *'Timer kaise lagayein?'*\n"
+            "- *'Study ke liye best time kitna hai?'*\n"
+            "- *'Sound kyu nahi aa rahi?'*"
+        )
+
+    if any(k in q for k in ["sound", "audio", "awaaz", "alarm", "chime"]):
+        return (
+            "🔊 **Sound / Alarm ki Maloomat:**\n\n"
+            "- Jab timer 00:00:00 par pohnchta hai to pyari si bell chime bajti hai.\n"
+            "- **Tip:** Browser security ki wajah se page par kam az kam ek dafa **Start** button click hona zaroori hai taake browser sound allow kare."
+        )
+
+    if any(k in q for k in ["preset", "buttons", "modes", "study", "work", "pomodoro"]):
+        return (
+            "🎯 **Aasaan Timer Presets:**\n\n"
+            "1. **Study / Work (25 min):** Har 25 minute baad 5 minute ka break lein (ise Pomodoro technique kehte hain).\n"
+            "2. **Chai Break (5 min):** Paani peene aur fresh hone ke liye.\n"
+            "3. **Long Break (15 min):** Kuch der araam karne ke liye.\n"
+            "4. **Deep Focus (45 min):** Lamba kaam ya exam preparation ke liye."
+        )
+
+    if any(k in q for k in ["kaise", "how to", "use", "chale"]):
+        return (
+            "⏱️ **Timer Use Karna Bohot Aasaan Hai:**\n\n"
+            "1. Screen par kisi bhi button par click karein (jaise *'Study (25 min)'*).\n"
+            "2. **Green START** button dabayein, countdown shuru ho jayega!\n"
+            "3. Kaam rokna ho to **PAUSE** dabayein, shuru se chalana ho to **RESET** dabayein."
+        )
+
+    return (
+        f"🤖 **ChronoFlow Assistant:**\n\n"
+        f"Aapne poocha: *\"{query}\"*\n\n"
+        f"Aap timer ko screen par buttons ke zariye aasaani se control kar sakte hain. "
+        f"Agar koi aur sawal ho to zaroor poochein, main 24/7 yahin mojood hoon!"
     )
 
-    st.markdown("#### 🎯 **Focus Target**")
-    daily_goal = st.slider("Daily Sessions Target", min_value=1, max_value=12, value=4)
-    progress_val = min(st.session_state.completed_count / daily_goal, 1.0)
-    st.progress(progress_val)
-    st.caption(f"Progress: {st.session_state.completed_count}/{daily_goal} Missions Accomplished")
-
-    st.divider()
-
-    st.markdown("#### ⚙️ **Audio & Synthesis**")
-    enable_audio = st.toggle("Enable Chimes & Alarms", value=True)
-    ambient_hint = st.checkbox("Enable Cyberpunk Focus Ambience", value=False)
-    st.caption("Sound waves are synthesized dynamically in your browser without external audio files.")
-
-    st.divider()
-
-    st.markdown("#### 📜 **Mission Control Log**")
-    if st.session_state.session_history:
-        for idx, item in enumerate(reversed(st.session_state.session_history[-5:])):
-            st.markdown(
-                f"<div style='font-size: 0.78rem; font-family: monospace; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 4px 0;'>"
-                f"✅ {item['time']} — <b>{item['task']}</b> ({item['duration']})"
-                f"</div>",
-                unsafe_allow_html=True,
-            )
-        if st.button("🗑️ Clear History", use_container_width=True):
-            st.session_state.session_history.clear()
-            st.session_state.completed_count = 0
-            st.rerun()
-    else:
-        st.caption("No missions logged yet. Complete a countdown cycle to archive telemetry.")
-
 
 # ---------------------------------------------------------
-# Main Page Header
+# App Header
 # ---------------------------------------------------------
 st.markdown(
-    f"""
-    <div class="agent-header">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div class="agent-badge">
-                <span class="pulse-dot"></span>
-                <span>CHRONOFLOW-AI // 24/7 SUPPORT & TEMPORAL ENGINE</span>
-            </div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #94a3b8;">
-                SYS_TIME: {datetime.datetime.now().strftime('%H:%M:%S UTC')}
-            </div>
-        </div>
-        <h1 class="agent-title">ChronoFlow-AI</h1>
-        <p class="agent-subtitle">
-            Autonomous Agentic Temporal Orchestrator &bull; 24/7 Live Customer Support Copilot
-        </p>
+    """
+    <div class="app-header">
+        <h1 class="app-title">⏱️ ChronoFlow Timer</h1>
+        <p class="app-tagline">Aasaan, Tez aur Khubsurat Countdown Timer</p>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
 # ---------------------------------------------------------
-# Productivity Score & Metrics Row
+# Quick Stats (Clean & Friendly)
 # ---------------------------------------------------------
-m1, m2, m3, m4 = st.columns(4)
-with m1:
-    st.metric("Total Focus Minutes", f"{(st.session_state.completed_count * 25):,} m")
-with m2:
-    st.metric("Missions Completed", f"{st.session_state.completed_count}")
-with m3:
-    st.metric("Focus Streak", f"{st.session_state.streak_count} 🔥")
-with m4:
-    st.metric("AI Agent Status", "24/7 LIVE 🟢")
+s1, s2, s3 = st.columns(3)
+with s1:
+    st.metric("Total Focus Time", f"{(st.session_state.completed_count * 25)} mins")
+with s2:
+    st.metric("Missions Completed", f"{st.session_state.completed_count} ✅")
+with s3:
+    st.metric("Assistant Status", "Online 🟢")
 
-st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# Navigation Tabs: Mission Control & 24/7 AI Chatbot
+# 1-Click Fast Presets (Aam bande ke liye bilkul simple)
 # ---------------------------------------------------------
-tab_timer, tab_chat, tab_faq = st.tabs(
-    [
-        "⏱️ ChronoFlow Mission HUD",
-        "🤖 24/7 AI Support Copilot",
-        "📚 Project Knowledge Base",
-    ]
-)
+st.markdown("<h4 style='text-align: center; font-size: 1.1rem; color: #9ca3af;'>⚡ Quick Presets (1-Click me time set karein)</h4>", unsafe_allow_html=True)
+p1, p2, p3, p4 = st.columns(4)
 
-# =========================================================
-# TAB 1: MISSION CONTROL HUD
-# =========================================================
-with tab_timer:
-    # Agentic Natural Language Command Dispatcher
-    with st.container():
-        st.markdown("#### 🤖 **Agentic Mission Dispatcher (Natural Language)**")
-        col_input, col_btn = st.columns([4, 1])
+with p1:
+    if st.button("💻 Study (25m)", use_container_width=True):
+        set_timer(25 * 60, "Study / Work")
+        st.rerun()
 
-        with col_input:
-            user_command = st.text_input(
-                "Enter mission in natural language:",
-                placeholder='e.g., "25m deep work on neural network fine-tuning" or "10 min chai break"',
-                label_visibility="collapsed",
-            )
+with p2:
+    if st.button("☕ Chai Break (5m)", use_container_width=True):
+        set_timer(5 * 60, "Chai Break")
+        st.rerun()
 
-        with col_btn:
-            if st.button("🚀 Deploy Mission", use_container_width=True):
-                if user_command.strip():
-                    parsed_secs, parsed_task = parse_natural_language_command(user_command)
-                    apply_preset(parsed_secs, parsed_task)
-                    st.rerun()
+with p3:
+    if st.button("🌴 Rest (15m)", use_container_width=True):
+        set_timer(15 * 60, "Rest & Refresh")
+        st.rerun()
 
-    # Quick Agentic Mission Presets
-    st.markdown("##### ⚡ **Tactical Presets**")
-    p1, p2, p3, p4 = st.columns(4)
+with p4:
+    if st.button("🚀 Focus (45m)", use_container_width=True):
+        set_timer(45 * 60, "Deep Focus")
+        st.rerun()
 
-    with p1:
-        if st.button("🧠 Deep Flow (25m)", use_container_width=True):
-            apply_preset(25 * 60, "Deep Flow: Cognitive Task Execution")
-            st.rerun()
+# ---------------------------------------------------------
+# Clean, Simple & Modern Circular Timer HUD
+# ---------------------------------------------------------
+hud_html = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap');
 
-    with p2:
-        if st.button("⚡ Hyper Sprint (15m)", use_container_width=True):
-            apply_preset(15 * 60, "Hyper Sprint: Rapid Problem Solving")
-            st.rerun()
+    * {{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+    }}
 
-    with p3:
-        if st.button("☕ Synaptic Recharge (5m)", use_container_width=True):
-            apply_preset(5 * 60, "Synaptic Recharge: Rest & Hydration")
-            st.rerun()
+    body {{
+        background: transparent;
+        color: #f8fafc;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px 0;
+    }}
 
-    with p4:
-        if st.button("🚀 Macro Flow (50m)", use_container_width=True):
-            apply_preset(50 * 60, "Macro Flow: High Architecture Design")
-            st.rerun()
+    .timer-card {{
+        width: 100%;
+        max-width: 540px;
+        background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        padding: 26px 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }}
 
-    # Manual Precision Calibration (Accordion)
-    with st.expander("🛠️ Manual Precision Calibration (Custom Time)", expanded=False):
-        c_hr, c_min, c_sec, c_set = st.columns([1, 1, 1, 1])
-        with c_hr:
-            in_hr = st.number_input("Hours", min_value=0, max_value=23, value=st.session_state.total_seconds // 3600)
-        with c_min:
-            in_min = st.number_input("Minutes", min_value=0, max_value=59, value=(st.session_state.total_seconds % 3600) // 60)
-        with c_sec:
-            in_sec = st.number_input("Seconds", min_value=0, max_value=59, value=st.session_state.total_seconds % 60)
-        with c_set:
-            st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
-            if st.button("Apply Precision Calibration", use_container_width=True):
-                calc_secs = int(in_hr * 3600 + in_min * 60 + in_sec)
-                if calc_secs > 0:
-                    apply_preset(calc_secs, "Custom Calibrated Mission")
-                    st.rerun()
-                else:
-                    st.error("Please enter a non-zero time.")
+    .task-badge {{
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        color: #a5b4fc;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }}
 
-    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+    .circle-wrap {{
+        position: relative;
+        width: 250px;
+        height: 250px;
+        margin: 6px 0 16px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }}
 
-    # Cyberpunk Animated Circular SVG HUD Component
-    hud_html = f"""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@600;700&display=swap');
+    svg {{
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+    }}
 
-        * {{
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }}
+    circle {{
+        fill: none;
+        stroke-width: 12;
+        stroke-linecap: round;
+    }}
 
-        body {{
-            background: transparent;
-            color: #f8fafc;
-            font-family: 'Space Grotesk', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0;
-            overflow: hidden;
-        }}
+    .circle-bg {{
+        stroke: rgba(255, 255, 255, 0.08);
+    }}
 
-        .hud-container {{
-            width: 100%;
-            max-width: 680px;
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.85) 0%, rgba(7, 10, 18, 0.95) 100%);
-            border: 1px solid rgba(0, 245, 212, 0.28);
-            border-radius: 24px;
-            padding: 28px 24px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 0 24px rgba(0, 245, 212, 0.04);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }}
+    .circle-progress {{
+        stroke: #6366f1;
+        stroke-dasharray: 722.5; /* 2 * PI * 115 */
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 0.3s ease, stroke 0.3s ease;
+        filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+    }}
 
-        .mission-header {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            margin-bottom: 20px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        }}
+    .circle-progress.paused {{
+        stroke: #f59e0b;
+        filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+    }}
 
-        .mission-title {{
-            font-size: 0.92rem;
-            font-weight: 700;
-            color: #e2e8f0;
-            letter-spacing: 0.02em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }}
+    .circle-progress.completed {{
+        stroke: #10b981;
+        filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.7));
+    }}
 
-        .status-badge {{
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: rgba(0, 245, 212, 0.1);
-            border: 1px solid rgba(0, 245, 212, 0.3);
-            color: #00f5d4;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }}
+    .timer-readout {{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }}
 
-        .circle-wrap {{
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 10px 0 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }}
+    .time-digits {{
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+        line-height: 1;
+    }}
 
-        svg {{
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }}
+    .status-text {{
+        font-size: 0.82rem;
+        color: #94a3b8;
+        font-weight: 600;
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }}
 
-        circle {{
-            fill: none;
-            stroke-width: 10;
-            stroke-linecap: round;
-        }}
+    .controls-row {{
+        display: flex;
+        gap: 12px;
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }}
 
-        .circle-bg {{
-            stroke: rgba(255, 255, 255, 0.06);
-        }}
+    button.btn-action {{
+        padding: 12px 24px;
+        border-radius: 14px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }}
 
-        .circle-progress {{
-            stroke: #00f5d4;
-            stroke-dasharray: 816.8;
-            stroke-dashoffset: 0;
-            transition: stroke-dashoffset 0.3s ease, stroke 0.4s ease;
-            filter: drop-shadow(0 0 10px rgba(0, 245, 212, 0.6));
-        }}
+    button.btn-start {{
+        background: #10b981;
+        color: #ffffff;
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }}
 
-        .circle-progress.paused {{
-            stroke: #f59e0b;
-            filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
-        }}
+    button.btn-start:hover {{
+        background: #059669;
+        transform: translateY(-2px);
+    }}
 
-        .circle-progress.completed {{
-            stroke: #10b981;
-            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8));
-        }}
+    button.btn-pause {{
+        background: #f59e0b;
+        color: #ffffff;
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }}
 
-        .timer-readout {{
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }}
+    button.btn-pause:hover {{
+        background: #d97706;
+        transform: translateY(-2px);
+    }}
 
-        .time-digits {{
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 3.2rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(0, 245, 212, 0.4);
-            line-height: 1;
-        }}
+    button.btn-reset {{
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #e2e8f0;
+    }}
 
-        .time-percent {{
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            color: #94a3b8;
-            margin-top: 8px;
-            letter-spacing: 0.05em;
-        }}
+    button.btn-reset:hover {{
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }}
 
-        .controls-grid {{
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
-        }}
+    .bumps-row {{
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+    }}
 
-        button.ctrl-btn {{
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #ffffff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.88rem;
-            font-weight: 700;
-            padding: 12px 22px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }}
+    button.btn-bump {{
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #c7d2fe;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }}
 
-        button.ctrl-btn:hover {{
-            background: rgba(0, 245, 212, 0.12);
-            border-color: #00f5d4;
-            box-shadow: 0 0 16px rgba(0, 245, 212, 0.35);
-            transform: translateY(-2px);
-        }}
+    button.btn-bump:hover {{
+        background: rgba(99, 102, 241, 0.3);
+        transform: translateY(-1px);
+    }}
+</style>
+</head>
+<body>
 
-        button.btn-primary {{
-            background: linear-gradient(135deg, #00f5d4 0%, #0070f3 100%);
-            color: #050811;
-            border: none;
-            box-shadow: 0 4px 18px rgba(0, 245, 212, 0.35);
-        }}
+<div class="timer-card">
+    <div class="task-badge">
+        <span>🎯</span>
+        <span>{st.session_state.task_name}</span>
+    </div>
 
-        button.btn-primary:hover {{
-            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
-            color: #ffffff;
-            box-shadow: 0 0 22px rgba(0, 245, 212, 0.55);
-        }}
-
-        button.btn-bump {{
-            padding: 8px 14px;
-            font-size: 0.78rem;
-            background: rgba(121, 40, 202, 0.15);
-            border-color: rgba(121, 40, 202, 0.4);
-            color: #c084fc;
-        }}
-
-        button.btn-bump:hover {{
-            border-color: #a855f7;
-            background: rgba(121, 40, 202, 0.3);
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
-        }}
-
-        .bumps-container {{
-            display: flex;
-            gap: 8px;
-            margin-top: 14px;
-        }}
-    </style>
-    </head>
-    <body>
-
-    <div class="hud-container">
-        <div class="mission-header">
-            <div class="mission-title">
-                <span>🎯</span>
-                <span id="taskLabel">{st.session_state.task_name}</span>
-            </div>
-            <div id="statusBadge" class="status-badge">● READY</div>
-        </div>
-
-        <div class="circle-wrap">
-            <svg viewBox="0 0 280 280">
-                <circle class="circle-bg" cx="140" cy="140" r="130"></circle>
-                <circle id="progressCircle" class="circle-progress" cx="140" cy="140" r="130"></circle>
-            </svg>
-            <div class="timer-readout">
-                <div id="timeDisplay" class="time-digits">--:--</div>
-                <div id="percentDisplay" class="time-percent">100% REMAINING</div>
-            </div>
-        </div>
-
-        <div class="controls-grid">
-            <button id="toggleBtn" class="ctrl-btn btn-primary" onclick="toggleTimer()">
-                <span id="toggleIcon">▶</span>
-                <span id="toggleText">START MISSION</span>
-            </button>
-            <button class="ctrl-btn" onclick="resetTimer()">
-                <span>⏹</span>
-                <span>RESET</span>
-            </button>
-        </div>
-
-        <div class="bumps-container">
-            <button class="ctrl-btn btn-bump" onclick="addSeconds(60)">+1 MIN</button>
-            <button class="ctrl-btn btn-bump" onclick="addSeconds(300)">+5 MIN</button>
-            <button class="ctrl-btn btn-bump" onclick="addSeconds(600)">+10 MIN</button>
+    <div class="circle-wrap">
+        <svg viewBox="0 0 250 250">
+            <circle class="circle-bg" cx="125" cy="125" r="115"></circle>
+            <circle id="progressCircle" class="circle-progress" cx="125" cy="125" r="115"></circle>
+        </svg>
+        <div class="timer-readout">
+            <div id="timeDisplay" class="time-digits">--:--</div>
+            <div id="statusLabel" class="status-text">READY</div>
         </div>
     </div>
 
-    <script>
-        let totalDuration = {st.session_state.total_seconds};
-        let remainingSeconds = totalDuration;
-        let isRunning = false;
-        let timerInterval = null;
-        let isAudioEnabled = {str(enable_audio).lower()};
-        let isAmbientEnabled = {str(ambient_hint).lower()};
+    <div class="controls-row">
+        <button id="toggleBtn" class="btn-action btn-start" onclick="toggleTimer()">
+            <span id="btnIcon">▶</span>
+            <span id="btnText">START</span>
+        </button>
+        <button class="btn-action btn-reset" onclick="resetTimer()">
+            <span>🔄</span>
+            <span>RESET</span>
+        </button>
+    </div>
 
-        const CIRCUMFERENCE = 2 * Math.PI * 130;
-        const progressCircle = document.getElementById('progressCircle');
-        const timeDisplay = document.getElementById('timeDisplay');
-        const percentDisplay = document.getElementById('percentDisplay');
-        const statusBadge = document.getElementById('statusBadge');
-        const toggleIcon = document.getElementById('toggleIcon');
-        const toggleText = document.getElementById('toggleText');
+    <div class="bumps-row">
+        <button class="btn-bump" onclick="addSeconds(60)">+1 Min</button>
+        <button class="btn-bump" onclick="addSeconds(300)">+5 Min</button>
+        <button class="btn-bump" onclick="addSeconds(600)">+10 Min</button>
+    </div>
+</div>
 
-        progressCircle.style.strokeDasharray = CIRCUMFERENCE;
+<script>
+    let totalDuration = {st.session_state.total_seconds};
+    let remaining = totalDuration;
+    let isRunning = false;
+    let timerId = null;
 
-        let audioCtx = null;
-        let ambientSource = null;
+    const CIRCLE_LENGTH = 2 * Math.PI * 115; // 722.56
+    const circle = document.getElementById('progressCircle');
+    const display = document.getElementById('timeDisplay');
+    const statusLabel = document.getElementById('statusLabel');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const btnIcon = document.getElementById('btnIcon');
+    const btnText = document.getElementById('btnText');
 
-        function initAudio() {{
+    circle.style.strokeDasharray = CIRCLE_LENGTH;
+
+    // Web Audio Bell Chime
+    let audioCtx = null;
+    function playChime() {{
+        try {{
             if (!audioCtx) {{
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
             }}
-            if (audioCtx.state === 'suspended') {{
-                audioCtx.resume();
-            }}
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // Sweet chord C-E-G-C
+            notes.forEach((freq, idx) => {{
+                setTimeout(() => {{
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.8);
+                }}, idx * 180);
+            }});
+        }} catch(e) {{}}
+    }}
+
+    function formatTime(secs) {{
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        const s = secs % 60;
+        if (h > 0) {{
+            return `${{String(h).padStart(2, '0')}}:${{String(m).padStart(2, '0')}}:${{String(s).padStart(2, '0')}}`;
         }}
+        return `${{String(m).padStart(2, '0')}}:${{String(s).padStart(2, '0')}}`;
+    }}
 
-        function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.15) {{
-            if (!isAudioEnabled) return;
-            try {{
-                initAudio();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            }} catch(e) {{}}
-        }}
+    function update() {{
+        display.innerText = formatTime(remaining);
+        const ratio = totalDuration > 0 ? remaining / totalDuration : 0;
+        circle.style.strokeDashoffset = CIRCLE_LENGTH * (1 - ratio);
+    }}
 
-        function playMissionCompleteChime() {{
-            if (!isAudioEnabled) return;
-            try {{
-                initAudio();
-                const notes = [523.25, 659.25, 783.99, 1046.50];
-                notes.forEach((freq, idx) => {{
-                    setTimeout(() => {{
-                        playTone(freq, 'triangle', 0.8, 0.25);
-                    }}, idx * 160);
-                }});
-            }} catch(e) {{}}
-        }}
-
-        function startAmbientNoise() {{
-            if (!isAmbientEnabled) return;
-            try {{
-                initAudio();
-                if (ambientSource) return;
-                const bufferSize = audioCtx.sampleRate * 2;
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-                let lastOut = 0.0;
-                for (let i = 0; i < bufferSize; i++) {{
-                    const white = Math.random() * 2 - 1;
-                    data[i] = (lastOut + (0.02 * white)) / 1.02;
-                    lastOut = data[i];
-                    data[i] *= 2.5;
-                }}
-                ambientSource = audioCtx.createBufferSource();
-                ambientSource.buffer = buffer;
-                ambientSource.loop = true;
-                const filter = audioCtx.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.value = 400;
-                const gain = audioCtx.createGain();
-                gain.gain.value = 0.08;
-                ambientSource.connect(filter);
-                filter.connect(gain);
-                gain.connect(audioCtx.destination);
-                ambientSource.start();
-            }} catch(e) {{}}
-        }}
-
-        function stopAmbientNoise() {{
-            if (ambientSource) {{
-                try {{
-                    ambientSource.stop();
-                    ambientSource.disconnect();
-                }} catch(e) {{}}
-                ambientSource = null;
-            }}
-        }}
-
-        function formatTime(totalSecs) {{
-            const hrs = Math.floor(totalSecs / 3600);
-            const mins = Math.floor((totalSecs % 3600) / 60);
-            const secs = totalSecs % 60;
-            if (hrs > 0) {{
-                return `${{String(hrs).padStart(2, '0')}}:${{String(mins).padStart(2, '0')}}:${{String(secs).padStart(2, '0')}}`;
-            }} else {{
-                return `${{String(mins).padStart(2, '0')}}:${{String(secs).padStart(2, '0')}}`;
-            }}
-        }}
-
-        function updateDisplay() {{
-            timeDisplay.innerText = formatTime(remainingSeconds);
-            const percent = totalDuration > 0 ? (remainingSeconds / totalDuration) : 0;
-            const offset = CIRCUMFERENCE * (1 - percent);
-            progressCircle.style.strokeDashoffset = offset;
-            percentDisplay.innerText = `${{Math.round(percent * 100)}}% REMAINING`;
-        }}
-
-        function toggleTimer() {{
-            initAudio();
-            if (isRunning) {{
-                clearInterval(timerInterval);
-                isRunning = false;
-                stopAmbientNoise();
-                toggleIcon.innerText = "▶";
-                toggleText.innerText = "RESUME";
-                statusBadge.innerText = "● PAUSED";
-                statusBadge.style.color = "#f59e0b";
-                progressCircle.classList.add('paused');
-                playTone(440, 'sine', 0.1, 0.1);
-            }} else {{
-                if (remainingSeconds <= 0) {{
-                    remainingSeconds = totalDuration;
-                }}
-                isRunning = true;
-                progressCircle.classList.remove('paused', 'completed');
-                toggleIcon.innerText = "⏸";
-                toggleText.innerText = "PAUSE";
-                statusBadge.innerText = "● AGENT ENGAGED";
-                statusBadge.style.color = "#00f5d4";
-                playTone(880, 'sine', 0.15, 0.15);
-                startAmbientNoise();
-
-                timerInterval = setInterval(() => {{
-                    if (remainingSeconds > 0) {{
-                        remainingSeconds--;
-                        updateDisplay();
-                    }} else {{
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        stopAmbientNoise();
-                        progressCircle.classList.add('completed');
-                        toggleIcon.innerText = "▶";
-                        toggleText.innerText = "RESTART";
-                        statusBadge.innerText = "● MISSION ACCOMPLISHED";
-                        statusBadge.style.color = "#10b981";
-                        playMissionCompleteChime();
-                    }}
-                }}, 1000);
-            }}
-        }}
-
-        function resetTimer() {{
-            clearInterval(timerInterval);
+    function toggleTimer() {{
+        if (isRunning) {{
+            // Pause
+            clearInterval(timerId);
             isRunning = false;
-            stopAmbientNoise();
-            remainingSeconds = totalDuration;
-            updateDisplay();
-            progressCircle.classList.remove('paused', 'completed');
-            toggleIcon.innerText = "▶";
-            toggleText.innerText = "START MISSION";
-            statusBadge.innerText = "● READY";
-            statusBadge.style.color = "#00f5d4";
-            playTone(330, 'sine', 0.1, 0.1);
+            circle.classList.add('paused');
+            toggleBtn.className = "btn-action btn-start";
+            btnIcon.innerText = "▶";
+            btnText.innerText = "RESUME";
+            statusLabel.innerText = "PAUSED";
+            statusLabel.style.color = "#f59e0b";
+        }} else {{
+            // Start
+            if (remaining <= 0) remaining = totalDuration;
+            isRunning = true;
+            circle.classList.remove('paused', 'completed');
+            toggleBtn.className = "btn-action btn-pause";
+            btnIcon.innerText = "⏸";
+            btnText.innerText = "PAUSE";
+            statusLabel.innerText = "RUNNING";
+            statusLabel.style.color = "#10b981";
+
+            timerId = setInterval(() => {{
+                if (remaining > 0) {{
+                    remaining--;
+                    update();
+                }} else {{
+                    clearInterval(timerId);
+                    isRunning = false;
+                    circle.classList.add('completed');
+                    toggleBtn.className = "btn-action btn-start";
+                    btnIcon.innerText = "▶";
+                    btnText.innerText = "RESTART";
+                    statusLabel.innerText = "TIME'S UP! ⏰";
+                    statusLabel.style.color = "#10b981";
+                    playChime();
+                }}
+            }}, 1000);
         }}
+    }}
 
-        function addSeconds(extra) {{
-            totalDuration += extra;
-            remainingSeconds += extra;
-            updateDisplay();
-            playTone(660, 'sine', 0.08, 0.1);
-        }}
+    function resetTimer() {{
+        clearInterval(timerId);
+        isRunning = false;
+        remaining = totalDuration;
+        circle.classList.remove('paused', 'completed');
+        toggleBtn.className = "btn-action btn-start";
+        btnIcon.innerText = "▶";
+        btnText.innerText = "START";
+        statusLabel.innerText = "READY";
+        statusLabel.style.color = "#94a3b8";
+        update();
+    }}
 
-        updateDisplay();
-    </script>
-    </body>
-    </html>
-    """
+    function addSeconds(sec) {{
+        totalDuration += sec;
+        remaining += sec;
+        update();
+    }}
 
-    components.html(hud_html, height=480, scrolling=False)
+    update();
+</script>
+</body>
+</html>
+"""
 
-    # Mission Log Recorder & Quick Archiver
-    st.markdown("---")
-    st.markdown("##### 📝 **Log & Archive Completed Session**")
-    l_col1, l_col2 = st.columns([3, 1])
+components.html(hud_html, height=440, scrolling=False)
 
-    with l_col1:
-        session_note = st.text_input(
-            "Mission Log Notes / Accomplishment Summary:",
-            value=f"Completed {st.session_state.task_name} session.",
+# ---------------------------------------------------------
+# Custom Time Input (Aam bande ke liye simple)
+# ---------------------------------------------------------
+with st.expander("🛠️ Custom Time Set Karein (Apni marzi ka waqt)", expanded=False):
+    t_tab1, t_tab2 = st.tabs(["🔢 Number Input", "✍️ Likh Kar Set Karein"])
+
+    with t_tab1:
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            inp_h = st.number_input("Ghante (Hours)", 0, 23, st.session_state.total_seconds // 3600)
+        with c2:
+            inp_m = st.number_input("Minutes", 0, 59, (st.session_state.total_seconds % 3600) // 60)
+        with c3:
+            inp_s = st.number_input("Seconds", 0, 59, st.session_state.total_seconds % 60)
+
+        custom_name = st.text_input("Kaam ka naam (Task Name):", value="Custom Session")
+
+        if st.button("Timer Apply Karein ⏱️", use_container_width=True):
+            tot = int(inp_h * 3600 + inp_m * 60 + inp_s)
+            if tot > 0:
+                set_timer(tot, custom_name if custom_name else "Custom Session")
+                st.rerun()
+            else:
+                st.warning("Please kam az kam 1 second select karein.")
+
+    with t_tab2:
+        nlp_text = st.text_input(
+            "Jaise ke: '30m coding' ya '10 min break'",
+            placeholder="e.g. 15m exercise",
         )
+        if st.button("Set Text Timer 🚀", use_container_width=True):
+            if nlp_text.strip():
+                t_sec, t_lbl = parse_simple_time_text(nlp_text)
+                set_timer(t_sec, t_lbl)
+                st.rerun()
 
-    with l_col2:
+# ---------------------------------------------------------
+# Completed Session Logger
+# ---------------------------------------------------------
+st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+with st.container():
+    col_l1, col_l2 = st.columns([3, 1])
+    with col_l1:
+        note = st.text_input("Session Notes (optional):", value=f"Completed {st.session_state.task_name}")
+    with col_l2:
         st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
-        if st.button("💾 Record Session to History", use_container_width=True):
-            duration_mins = max(1, st.session_state.total_seconds // 60)
+        if st.button("Save Session ✅", use_container_width=True):
+            st.session_state.completed_count += 1
             st.session_state.session_history.append(
                 {
-                    "time": datetime.datetime.now().strftime("%H:%M:%S"),
+                    "time": datetime.datetime.now().strftime("%I:%M %p"),
                     "task": st.session_state.task_name,
-                    "duration": f"{duration_mins}m",
-                    "notes": session_note,
+                    "note": note,
                 }
             )
-            st.session_state.completed_count += 1
-            st.session_state.streak_count += 1
-            st.success(f"Archived mission: {st.session_state.task_name} (+{duration_mins}m)")
+            st.success("Session save ho gaya!")
             st.rerun()
 
-
-# =========================================================
-# TAB 2: 24/7 LIVE CUSTOMER SUPPORT & MISSION COPILOT
-# =========================================================
-with tab_chat:
+# ---------------------------------------------------------
+# FLOATING CORNER CHATBOT (Bottom Right Website-Style Widget)
+# ---------------------------------------------------------
+with st.popover("💬 Chat Support (24/7)", use_container_width=False):
     st.markdown(
         """
-        <div style="background: rgba(0, 245, 212, 0.05); border: 1px solid rgba(0, 245, 212, 0.25); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <span style="color: #00f5d4; font-weight: 700; font-family: 'JetBrains Mono', monospace;">● 24/7 AUTONOMOUS CUSTOMER SUPPORT COPILOT</span>
-                    <p style="color: #94a3b8; font-size: 0.85rem; margin: 4px 0 0 0;">
-                        Live intelligent agent with complete project knowledge. Ask questions, troubleshoot, or request focus coaching.
-                    </p>
-                </div>
-                <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; font-size: 0.75rem; padding: 4px 10px; border-radius: 999px; font-family: monospace;">
-                    LIVE 24/7
-                </div>
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px;">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #818cf8; display: flex; align-items: center; gap: 8px;">
+                <span>💬</span>
+                <span>ChronoFlow Assistant</span>
+                <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 999px;">● Online</span>
             </div>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">
+                Main aapka 24/7 live helper hoon. Kuch bhi poochein!
+            </p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # Quick Suggestion Prompts
-    st.markdown("##### ⚡ **Instant Questions:**")
-    q_col1, q_col2, q_col3 = st.columns(3)
-    with q_col1:
-        if st.button("❓ How do I set natural language timers?", use_container_width=True):
-            user_msg = "How do I set natural language timers?"
-            st.session_state.chat_messages.append({"role": "user", "content": user_msg})
-            reply = query_24_7_support_agent(user_msg)
-            st.session_state.chat_messages.append({"role": "assistant", "content": reply})
+    # Quick Suggestion Chips
+    c_chip1, c_chip2 = st.columns(2)
+    with c_chip1:
+        if st.button("⏱️ Timer kaise chalayein?", use_container_width=True):
+            user_q = "Timer kaise chalayein?"
+            st.session_state.chat_messages.append({"role": "user", "content": user_q})
+            ans = get_corner_chat_reply(user_q)
+            st.session_state.chat_messages.append({"role": "assistant", "content": ans})
             st.rerun()
 
-    with q_col2:
-        if st.button("🔊 Why is audio/alarm not making sound?", use_container_width=True):
-            user_msg = "Why is audio not making sound?"
-            st.session_state.chat_messages.append({"role": "user", "content": user_msg})
-            reply = query_24_7_support_agent(user_msg)
-            st.session_state.chat_messages.append({"role": "assistant", "content": reply})
+    with c_chip2:
+        if st.button("🧠 Study ke tips?", use_container_width=True):
+            user_q = "Study ke tips?"
+            st.session_state.chat_messages.append({"role": "user", "content": user_q})
+            ans = get_corner_chat_reply(user_q)
+            st.session_state.chat_messages.append({"role": "assistant", "content": ans})
             st.rerun()
 
-    with q_col3:
-        if st.button("🧠 Best focus routine for coding?", use_container_width=True):
-            user_msg = "Best focus routine for coding?"
-            st.session_state.chat_messages.append({"role": "user", "content": user_msg})
-            reply = query_24_7_support_agent(user_msg)
+    # Chat Messages Box
+    with st.container(height=260):
+        for msg in st.session_state.chat_messages:
+            with st.chat_message(msg["role"]):
+                st.write(msg["content"])
+
+    # Chat Form Input
+    with st.form("corner_chat_form", clear_on_submit=True):
+        chat_col_in, chat_col_btn = st.columns([4, 1])
+        with chat_col_in:
+            user_input = st.text_input(
+                "Message...",
+                placeholder="Apna sawal yahan likhein...",
+                label_visibility="collapsed",
+            )
+        with chat_col_btn:
+            send_clicked = st.form_submit_button("Send 🚀")
+
+        if send_clicked and user_input.strip():
+            st.session_state.chat_messages.append({"role": "user", "content": user_input})
+            reply = get_corner_chat_reply(user_input)
             st.session_state.chat_messages.append({"role": "assistant", "content": reply})
             st.rerun()
-
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-
-    # Render Conversation History
-    for message in st.session_state.chat_messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    # Chat Input Box
-    if prompt := st.chat_input("Ask 24/7 ChronoFlow AI Support Agent anything..."):
-        # Display user message
-        st.session_state.chat_messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        # Generate Agent Response
-        response = query_24_7_support_agent(prompt)
-        st.session_state.chat_messages.append({"role": "assistant", "content": response})
-        with st.chat_message("assistant"):
-            st.markdown(response)
-
-
-# =========================================================
-# TAB 3: PROJECT KNOWLEDGE BASE & TELEMETRY
-# =========================================================
-with tab_faq:
-    st.markdown("### 📚 **ChronoFlow-AI Project Knowledge Base**")
-    st.markdown(
-        """
-        Welcome to the technical specification and knowledge center for **ChronoFlow-AI (AETHR-CHRONOS)**.
-        """
-    )
-
-    k1, k2 = st.columns(2)
-    with k1:
-        st.markdown("#### 🚀 **System Architecture**")
-        st.info(
-            "• **Core Framework:** Python 3.12 + Streamlit 1.42+\n\n"
-            "• **Frontend Engine:** Client-Side JavaScript 60 FPS Event Loop\n\n"
-            "• **Vector & State Machine:** Non-blocking SVG Circular Dash-offset Renderer\n\n"
-            "• **Audio Synthesizer:** Browser Web Audio API (OscillatorNode & BiquadFilterNode)\n\n"
-            "• **NLP Extractor:** Regular Expression Semantic Tokenizer"
-        )
-
-    with k2:
-        st.markdown("#### 🎯 **Tactical Presets & Cognitive Science**")
-        st.success(
-            "• **Deep Flow (25m):** Optimized for single-task focus based on the Pomodoro technique.\n\n"
-            "• **Hyper Sprint (15m):** High-velocity bursts for debugging and hotfixes.\n\n"
-            "• **Synaptic Recharge (5m):** Micro-break for brain frequency recovery.\n\n"
-            "• **Macro Flow (50m):** Prolonged flow-state for deep architecture and algorithm design."
-        )
-
-    st.markdown("#### ❓ **Frequently Asked Questions (FAQ)**")
-    with st.expander("Q: Does this timer consume external cloud API quotas?"):
-        st.write(
-            "No! ChronoFlow-AI is engineered with a **zero-dependency philosophy**. Both the countdown HUD and the 24/7 customer support engine run locally and in-browser with zero external API requirements."
-        )
-
-    with st.expander("Q: How does the ambient brown noise work?"):
-        st.write(
-            "When enabled in the sidebar, a custom Web Audio buffer generates brownian random noise passed through a 400Hz low-pass biquad filter. This creates an acoustic mask that shields you from background noise."
-        )
-
-    with st.expander("Q: Where is my session history stored?"):
-        st.write(
-            "Session history is tracked in Streamlit's reactive `session_state`. You can review past missions in the sidebar or download/clear them anytime."
-        )
 
 # ---------------------------------------------------------
-# Footer / Agentic Developer Credits
+# Clean Minimal Footer
 # ---------------------------------------------------------
 st.markdown(
     """
-    <div style="text-align: center; margin-top: 40px; padding: 20px; color: #64748b; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; border-top: 1px solid rgba(255,255,255,0.05);">
-        <span>⚡ CHRONOFLOW-AI // ENGINEERED BY AGENTIC AI DEVELOPER &bull; 24/7 AUTONOMOUS SUPPORT COPILOT &bull; ZERO LATENCY</span>
+    <div style="text-align: center; margin-top: 30px; padding: 16px; color: #6b7280; font-size: 0.82rem;">
+        <span>ChronoFlow Timer &bull; Simple, Modern & Fast</span>
     </div>
     """,
     unsafe_allow_html=True,
