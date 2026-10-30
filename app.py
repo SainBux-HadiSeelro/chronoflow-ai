@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# High-Contrast, Crystal Clear Styling (Light & Dark Safe)
+# High-Contrast, Crystal Clear Styling & Corner Floating Widget
 # ---------------------------------------------------------
 st.markdown(
     """
@@ -176,32 +176,52 @@ st.markdown(
         color: #ffffff !important;
     }
 
-    /* FLOATING CORNER CHATBOT BUTTON (Fixed at Bottom-Right) */
-    div[data-testid="stPopover"] {
+    /* =========================================================
+       TRUE FLOATING CORNER CHATBOT (Bottom-Right Corner Widget)
+       Exactly like website live chat widgets (Intercom / Zendesk)
+       ========================================================= */
+    div.stPopover, [data-testid="stPopover"] {
         position: fixed !important;
-        bottom: 24px !important;
-        right: 24px !important;
-        z-index: 999999 !important;
+        bottom: 26px !important;
+        right: 26px !important;
+        z-index: 99999999 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
-    div[data-testid="stPopover"] > button {
+    button[data-testid="stPopoverButton"] {
+        position: fixed !important;
+        bottom: 26px !important;
+        right: 26px !important;
+        z-index: 99999999 !important;
         border-radius: 50px !important;
-        padding: 14px 24px !important;
+        padding: 14px 22px !important;
         background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
         color: #ffffff !important;
         font-weight: 800 !important;
-        font-size: 1rem !important;
-        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.6), 0 0 15px rgba(124, 58, 237, 0.4) !important;
-        border: none !important;
+        font-size: 1.05rem !important;
+        box-shadow: 0 10px 30px rgba(79, 70, 229, 0.65), 0 0 20px rgba(124, 58, 237, 0.45) !important;
+        border: 2px solid rgba(255, 255, 255, 0.25) !important;
         display: inline-flex !important;
         align-items: center !important;
-        gap: 10px !important;
-        transition: all 0.25s ease !important;
+        gap: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        animation: pulseButton 3s infinite !important;
     }
 
-    div[data-testid="stPopover"] > button:hover {
-        transform: scale(1.06) !important;
-        box-shadow: 0 15px 35px rgba(79, 70, 229, 0.8) !important;
+    @keyframes pulseButton {
+        0%, 100% {
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.65), 0 0 0 0 rgba(99, 102, 241, 0.5);
+        }
+        50% {
+            box-shadow: 0 14px 35px rgba(79, 70, 229, 0.85), 0 0 0 10px rgba(99, 102, 241, 0);
+        }
+    }
+
+    button[data-testid="stPopoverButton"]:hover {
+        transform: translateY(-3px) scale(1.06) !important;
+        box-shadow: 0 16px 40px rgba(79, 70, 229, 0.9) !important;
     }
 
     /* FLOATING CHATBOX WINDOW (Popover Body) */
@@ -832,9 +852,9 @@ with st.container():
             st.rerun()
 
 # ---------------------------------------------------------
-# FLOATING CORNER CHATBOT (Bottom-Right Website Widget)
+# TRUE FLOATING CORNER CHATBOT (Bottom-Right Website Widget)
 # ---------------------------------------------------------
-with st.popover("💬 Chat Support (24/7)", use_container_width=False):
+with st.popover("💬 Chat ● Online", use_container_width=False):
     st.markdown(
         """
         <div style="border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 14px;">
@@ -866,7 +886,7 @@ with st.popover("💬 Chat Support (24/7)", use_container_width=False):
             user_q = "Study ke tips?"
             st.session_state.chat_messages.append({"role": "user", "content": user_q})
             ans = get_corner_chat_reply(user_q)
-            st.session_state.chat_messages.append({"role": "assistant", "content": ans})
+            st.session_state.chat_messages.append({"role": "assistant", "content": reply if 'reply' in locals() else ans})
             st.rerun()
 
     # Chat Messages Box (High Contrast)
