@@ -1,0 +1,16 @@
+[project]
+name = "aethr-chronos-timer"
+version = "1.0.0"
+description = "AETHR-CHRONOS — Modern Agentic AI Temporal & Focus Orchestrator"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "Agentic AI Developer" }
+]
+dependencies = [
+    "streamlit>=1.42.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
