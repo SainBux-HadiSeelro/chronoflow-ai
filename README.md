@@ -1,83 +1,137 @@
-# ⏱️ AETHR-CHRONOS // Agentic AI Temporal Orchestrator
+<div align="center">
 
-[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.42+-FF4B4B.svg)](https://streamlit.io)
-[![Agentic AI](https://img.shields.io/badge/Design-Agentic%20AI%20HUD-00f5d4.svg)](#)
-[![Zero Latency](https://img.shields.io/badge/Engine-Client--Side%2060FPS-7928ca.svg)](#)
+# ⏱️ ChronoFlow-AI
+### Modern Agentic Focus Orchestrator & 24/7 Live AI Assistant
 
-> **AETHR-CHRONOS** is a next-generation countdown timer and focus orchestrator built with an **Agentic AI** philosophy. Designed for developers, researchers, and power users who need high-precision temporal control without UI freezing, thread-blocking, or bland aesthetics.
+[![Live App](https://img.shields.io/badge/🚀%20Live%20Demo-chronoflow--ai.streamlit.app-4f46e5?style=for-the-badge&logo=streamlit)](https://chronoflow-ai.streamlit.app/)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit 1.42](https://img.shields.io/badge/Streamlit-1.42+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Engine](https://img.shields.io/badge/Engine-Client--Side%2060FPS-10b981?style=for-the-badge)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+<br />
+
+**[🌐 Launch Live Application](https://chronoflow-ai.streamlit.app/)** • **[✨ Key Features](#-key-features)** • **[⚙️ Technical Specs](#-technical-specifications)** • **[🚀 Quickstart](#-quickstart-guide)** • **[👤 Author](#-developer--portfolio)**
+
+</div>
 
 ---
 
-## ⚡ Key Highlights & Upgrades
+## 🌟 Overview
 
-### 🧠 1. Agentic Natural Language Mission Parser
-No need to fiddle with multiple number inputs. Simply type what you want in plain text:
-- `"25m deep work on neural network fine-tuning"`
-- `"1h 30m architecture review"`
-- `"45s eye relaxation"`
-- `"10 min chai break"`
+**ChronoFlow-AI** is a next-generation countdown timer and productivity focus orchestrator engineered with an **Agentic AI** design philosophy. 
 
-The AI parser extracts duration and context automatically and deploys the mission!
+Traditional Streamlit countdown timers suffer from server-side thread-blocking (`time.sleep(1)`), which freezes the UI, prevents pausing, and crashes upon user interaction. **ChronoFlow-AI** solves this fundamentally by decoupling temporal execution into a **zero-latency, client-side SVG circular engine**, complemented by a **24/7 floating corner AI Customer Support & Mission Assistant**.
 
-### 🔮 2. Sci-Fi Cyberpunk HUD (60 FPS Non-Blocking)
-- **Fluid Circular SVG Progress Ring**: Real-time glow animations that dynamically adjust with the remaining percentage.
-- **Zero-Freeze State Machine**: Resolves the classic Streamlit `time.sleep()` blocking bug. You can **Pause**, **Resume**, **Reset**, and instantly bump (**+1m**, **+5m**, **+10m**) without freezing your backend.
+> 💡 Built to be clean, intuitive, and accessible for everyone — from students and everyday users to high-performance software engineers.
 
-### 🎵 3. Zero-Dependency Web Audio Synthesis
-- **Dynamic Harmonic Chimes**: Synthesizes multi-tone alert chords upon mission completion using the browser's Web Audio API.
-- **Cyberpunk Brown Noise Ambience**: Optional ambient background sound generated directly via audio buffers to enhance deep focus without loading external MP3 files.
+---
 
-### 📊 4. Focus Telemetry & Mission Archiving
-- Daily goal tracking and progress visualizers.
-- Live streak counter and temporal efficiency metrics.
-- Mission archive log to record completed sprints with custom notes.
+## ✨ Key Features
+
+### 1. ⏱️ 60 FPS Non-Blocking Circular HUD
+- **Zero-Latency Execution:** Runs smoothly at 60 FPS using client-side SVG stroke-dashoffset animations.
+- **Full Interactive Controls:** Instant **START**, **PAUSE**, **RESUME**, **RESET**, and quick time bump buttons (**+1m**, **+5m**, **+10m**) without any UI freezing or reload delay.
+
+### 2. 💬 Floating Corner AI Assistant (24/7 Live Widget)
+- **Website-Style Floating FAB:** Pinned permanently to the bottom-right corner of the screen with a glowing gradient and gentle pulse animation.
+- **Embedded Knowledge Engine:** 100% offline, zero-quota dependency — answers queries in real-time about timer usage, Pomodoro science, and study routines in both **English and Urdu/Roman Urdu**.
+- **1-Click Suggestion Chips:** Instant access to common questions.
+
+### 3. 🤖 Natural Language Mission Dispatcher
+- Simply write what you want in plain text:
+  - `25m deep work on neural network`
+  - `1h 30m code review`
+  - `10 min chai break`
+  - `45s eye relaxation`
+- The built-in NLP tokenizer automatically extracts the duration and mission objective.
+
+### 4. 🔊 Zero-Dependency Web Audio Synthesis
+- **Harmonic Chimes:** Synthesizes pleasant musical chords (C5–E5–G5–C6) directly via the browser's **Web Audio API** when the timer completes.
+- **No External Files:** Eliminates broken audio links or 404 missing asset errors.
+
+### 5. 🎯 Tactical 1-Click Presets
+- 💻 **Study / Work (25 min):** Pomodoro cognitive flow state.
+- ☕ **Chai Break (5 min):** Short physical and mental reset.
+- 🌴 **Rest (15 min):** Long recovery break.
+- 🚀 **Deep Focus (45 min):** Extended architecture and exam preparation.
+
+---
+
+## ⚙️ Technical Specifications
+
+| Parameter | Specification | Details |
+| :--- | :--- | :--- |
+| **Live URL** | [chronoflow-ai.streamlit.app](https://chronoflow-ai.streamlit.app/) | Hosted on Streamlit Community Cloud |
+| **Backend Framework** | Python 3.12+ / Streamlit 1.42+ | Reactive state machine & session management |
+| **Frontend HUD Engine** | HTML5 / Inline SVG / JavaScript (ES6) | Client-side event loop, 0ms latency |
+| **Audio Architecture** | Web Audio API | Sine & triangle wave oscillator synthesis |
+| **NLP Tokenizer** | Regex Semantic Parser | Extracts composite hours, minutes, and seconds |
+| **Theme & Accessibility** | High-Contrast Slate Dark Mode | WCAG AAA contrast ratio (`#0b0f19` / `#ffffff`) |
+| **Chatbot Architecture** | Floating Popover Widget | Bottom-right viewport-pinned modal |
+| **State Persistence** | `st.session_state` | Tracks session streaks, total focus minutes & logs |
+
+---
+
+## 🏗️ Architecture & Workflow
+
+```mermaid
+flowchart TD
+    A["User Input / Presets"] -->|Natural Language or 1-Click| B["NLP Tokenizer & State Manager"]
+    B --> C["Client-Side 60 FPS SVG HUD"]
+    C -->|Countdown Running| D["Visual Dash-Offset Render"]
+    C -->|Timer = 00:00:00| E["Web Audio API Synthesizer (Chime Alert)"]
+    C -->|Completed| F["Session Telemetry & History Logger"]
+    
+    G["24/7 Corner Floating AI Widget"] -->|User Query| H["Knowledge Base & Support Engine"]
+    H -->|Instant Guidance| G
+```
 
 ---
 
 ## 🚀 Quickstart Guide
 
-### 1. Prerequisites
-Ensure you have **Python 3.12+** installed on your system.
+### 1. Clone the Repository
+```bash
+git clone https://github.com/SainBux-HadiSeelro/chronoflow-ai.git
+cd chronoflow-ai
+```
 
 ### 2. Install Dependencies
 ```bash
-python -m pip install -e .
+pip install -r requirements.txt
 ```
-*(or simply install Streamlit directly: `python -m pip install "streamlit>=1.42.0"`)*
 
-### 3. Launch the Application
-Run the Streamlit app:
+### 3. Run Locally
 ```bash
-python -m streamlit run app.py
+streamlit run app.py
 ```
-
-The application will launch in your browser at `http://localhost:8501`.
+Open your browser at `http://localhost:8501`.
 
 ---
 
-## 🎮 Tactical Presets
-
-| Preset | Duration | Optimized For |
-| :--- | :--- | :--- |
-| **🧠 Deep Flow** | 25 Min | Core cognitive coding, model training, algorithm design |
-| **⚡ Hyper Sprint** | 15 Min | Rapid debugging, quick reviews, hotfixes |
-| **☕ Synaptic Recharge** | 5 Min | Mental cooldown, hydration, physical stretch |
-| **🚀 Macro Flow** | 50 Min | High-level system architecture, prolonged deep work |
-
----
-
-## 🏗️ Architecture
+## 📂 Project Structure
 
 ```
-6_Countdown Timer Python Project/
-├── app.py              # AETHR-CHRONOS Flagship Application (Streamlit + HUD)
-├── pyproject.toml      # Dependency & package configuration
-├── README.md           # Documentation & user guide
+chronoflow-ai/
+├── app.py              # Main Application (HUD, State Machine & Chatbot)
+├── requirements.txt    # Production dependencies (streamlit>=1.42.0)
+├── pyproject.toml      # Project packaging metadata
+├── README.md           # Professional documentation
 └── .gitignore          # Version control ignore rules
 ```
 
 ---
 
-## 🛡️ License
-MIT License. Crafted with precision by an **Agentic AI Developer**.
+## 👤 Developer & Portfolio
+
+Developed with passion by **Sain Bux (Hadi Seelro)** — *Agentic AI & Full-Stack Developer*.
+
+- 🌐 **Live Demo:** [chronoflow-ai.streamlit.app](https://chronoflow-ai.streamlit.app/)
+- 💻 **GitHub:** [@SainBux-HadiSeelro](https://github.com/SainBux-HadiSeelro)
+- 💼 **Project Category:** Agentic AI Tools / Human-Computer Interaction / Productivity HUD
+
+---
+
+## 📄 License
+This project is licensed under the **MIT License** — feel free to use, modify, and distribute.
