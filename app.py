@@ -1,6 +1,6 @@
 """
 ChronoFlow-AI // Simple, Modern & High-Contrast Countdown Timer with 24/7 Corner Chatbot
-Optimized for 100% visual clarity, readability and ease of use.
+Optimized for 100% visual clarity, readability, mobile responsiveness and ease of use.
 """
 
 import re
@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# High-Contrast, Crystal Clear Styling & Corner Floating Widget
+# Global High-Contrast Styling & Mobile Responsiveness
 # ---------------------------------------------------------
 st.markdown(
     """
@@ -38,15 +38,31 @@ st.markdown(
         color: #f8fafc !important;
     }
 
+    /* Main Container Mobile Optimization */
+    .block-container {
+        max-width: 680px !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 5rem !important;
+    }
+
+    @media (max-width: 640px) {
+        .block-container {
+            padding-left: 0.85rem !important;
+            padding-right: 0.85rem !important;
+            padding-top: 1rem !important;
+            padding-bottom: 6rem !important;
+        }
+    }
+
     /* App Header */
     .app-header {
         text-align: center;
-        margin-top: 10px;
-        margin-bottom: 22px;
+        margin-top: 4px;
+        margin-bottom: 16px;
     }
 
     .app-title {
-        font-size: 2.3rem !important;
+        font-size: clamp(1.6rem, 5vw, 2.2rem) !important;
         font-weight: 800 !important;
         letter-spacing: -0.02em;
         margin-bottom: 4px;
@@ -55,16 +71,16 @@ st.markdown(
 
     .app-tagline {
         color: #94a3b8 !important;
-        font-size: 1.05rem !important;
+        font-size: clamp(0.85rem, 2.6vw, 1.05rem) !important;
         font-weight: 500;
         margin: 0;
     }
 
-    /* All Widget Labels (Hours, Minutes, Task Name, Notes) */
+    /* Widget Labels (Hours, Minutes, Task Name, Notes) */
     label, [data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] span {
         color: #f1f5f9 !important;
         font-weight: 700 !important;
-        font-size: 0.95rem !important;
+        font-size: 0.92rem !important;
     }
 
     /* Input Boxes (Text input, Number input) - Solid Background with Crisp White Text */
@@ -74,7 +90,7 @@ st.markdown(
         -webkit-text-fill-color: #ffffff !important;
         border: 1.5px solid #475569 !important;
         border-radius: 10px !important;
-        font-size: 1rem !important;
+        font-size: 0.95rem !important;
         font-weight: 600 !important;
     }
 
@@ -95,25 +111,41 @@ st.markdown(
         border-color: #475569 !important;
     }
 
-    /* Metric Cards */
+    /* Responsive Stats Metric Cards (Keeps them in 1 Row on Mobile) */
+    [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+    }
+
+    [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) > [data-testid="stColumn"] {
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+    }
+
     div[data-testid="stMetric"] {
         background-color: #1e293b !important;
         border: 1.5px solid #334155 !important;
-        border-radius: 14px !important;
-        padding: 12px 18px !important;
+        border-radius: 12px !important;
+        padding: 8px 12px !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+        text-align: center !important;
     }
 
     div[data-testid="stMetricLabel"] p {
         color: #cbd5e1 !important;
-        font-size: 0.88rem !important;
+        font-size: clamp(0.68rem, 2.2vw, 0.85rem) !important;
         font-weight: 600 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
 
     div[data-testid="stMetricValue"] div {
         color: #38bdf8 !important;
         font-weight: 800 !important;
-        font-size: 1.4rem !important;
+        font-size: clamp(1.05rem, 3.2vw, 1.35rem) !important;
     }
 
     /* Streamlit Standard Buttons (Presets & Action buttons) */
@@ -123,8 +155,8 @@ st.markdown(
         border: 1.5px solid #475569 !important;
         border-radius: 12px !important;
         font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        padding: 10px 16px !important;
+        font-size: 0.92rem !important;
+        padding: 9px 12px !important;
         transition: all 0.2s ease !important;
     }
 
@@ -134,6 +166,23 @@ st.markdown(
         color: #ffffff !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4) !important;
+    }
+
+    /* Quick Presets on Mobile: Clean 2x2 Grid instead of stacked rows */
+    @media (max-width: 640px) {
+        div[data-testid="stHorizontalBlock"]:has(.stButton) {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
+        }
+        div[data-testid="stHorizontalBlock"]:has(.stButton) > div[data-testid="stColumn"] {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+        .stButton > button {
+            padding: 10px 8px !important;
+            font-size: 0.85rem !important;
+        }
     }
 
     /* Expander Container & Header */
@@ -153,7 +202,7 @@ st.markdown(
     [data-testid="stExpander"] summary span, [data-testid="stExpander"] summary p {
         color: #f8fafc !important;
         font-weight: 700 !important;
-        font-size: 1rem !important;
+        font-size: 0.96rem !important;
     }
 
     /* Tabs Inside Expander */
@@ -168,7 +217,8 @@ st.markdown(
         color: #94a3b8 !important;
         font-weight: 700 !important;
         border-radius: 8px !important;
-        padding: 8px 14px !important;
+        padding: 7px 12px !important;
+        font-size: 0.88rem !important;
     }
 
     .stTabs [aria-selected="true"] {
@@ -176,90 +226,17 @@ st.markdown(
         color: #ffffff !important;
     }
 
-    /* =========================================================
-       TRUE FLOATING CORNER CHATBOT (Bottom-Right Corner Widget)
-       Exactly like website live chat widgets (Intercom / Zendesk)
-       ========================================================= */
-    div.stPopover, [data-testid="stPopover"] {
-        position: fixed !important;
-        bottom: 26px !important;
-        right: 26px !important;
-        z-index: 99999999 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    button[data-testid="stPopoverButton"] {
-        position: fixed !important;
-        bottom: 26px !important;
-        right: 26px !important;
-        z-index: 99999999 !important;
-        border-radius: 50px !important;
-        padding: 14px 22px !important;
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
-        color: #ffffff !important;
-        font-weight: 800 !important;
-        font-size: 1.05rem !important;
-        box-shadow: 0 10px 30px rgba(79, 70, 229, 0.65), 0 0 20px rgba(124, 58, 237, 0.45) !important;
-        border: 2px solid rgba(255, 255, 255, 0.25) !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        cursor: pointer !important;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        animation: pulseButton 3s infinite !important;
-    }
-
-    @keyframes pulseButton {
-        0%, 100% {
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.65), 0 0 0 0 rgba(99, 102, 241, 0.5);
+    /* Custom Number Input Columns side by side on Mobile */
+    @media (max-width: 640px) {
+        [data-testid="stExpander"] [data-testid="stHorizontalBlock"] {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 6px !important;
         }
-        50% {
-            box-shadow: 0 14px 35px rgba(79, 70, 229, 0.85), 0 0 0 10px rgba(99, 102, 241, 0);
+        [data-testid="stExpander"] [data-testid="stColumn"] {
+            min-width: 0 !important;
+            flex: 1 1 0 !important;
         }
-    }
-
-    button[data-testid="stPopoverButton"]:hover {
-        transform: translateY(-3px) scale(1.06) !important;
-        box-shadow: 0 16px 40px rgba(79, 70, 229, 0.9) !important;
-    }
-
-    /* FLOATING CHATBOX WINDOW (Popover Body) */
-    div[data-testid="stPopoverBody"] {
-        background-color: #0f172a !important;
-        border: 2px solid #6366f1 !important;
-        border-radius: 20px !important;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75) !important;
-        padding: 18px !important;
-        color: #ffffff !important;
-        max-width: 420px !important;
-    }
-
-    div[data-testid="stPopoverBody"] p, div[data-testid="stPopoverBody"] span, div[data-testid="stPopoverBody"] div {
-        color: #f8fafc !important;
-    }
-
-    /* Chat Messages Inside Popover */
-    .stChatMessage {
-        background-color: #1e293b !important;
-        border: 1px solid #334155 !important;
-        border-radius: 14px !important;
-        padding: 12px 14px !important;
-        margin-bottom: 10px !important;
-    }
-
-    .stChatMessage p, .stChatMessage span {
-        color: #f8fafc !important;
-        font-size: 0.92rem !important;
-        line-height: 1.45 !important;
-    }
-
-    /* Chat input field inside popover */
-    div[data-testid="stPopoverBody"] input {
-        background-color: #1e293b !important;
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-        border: 1.5px solid #6366f1 !important;
     }
     </style>
     """,
@@ -277,16 +254,6 @@ if "completed_count" not in st.session_state:
     st.session_state.completed_count = 0
 if "session_history" not in st.session_state:
     st.session_state.session_history = []
-if "chat_messages" not in st.session_state:
-    st.session_state.chat_messages = [
-        {
-            "role": "assistant",
-            "content": (
-                "👋 **Assalam o Alaikum! Main aapka 24/7 AI Assistant hoon.**\n\n"
-                "Aap mujhse timer use karne, study schedule banane, ya kisi bhi feature ke baare me pooch sakte hain!"
-            ),
-        }
-    ]
 
 
 # ---------------------------------------------------------
@@ -323,54 +290,7 @@ def set_timer(seconds: int, task: str):
 
 
 # ---------------------------------------------------------
-# 24/7 Corner Chatbot Knowledge
-# ---------------------------------------------------------
-def get_corner_chat_reply(query: str) -> str:
-    q = query.lower().strip()
-
-    if any(k in q for k in ["salam", "hello", "hi", "hey", "kese", "kaise", "hal"]):
-        return (
-            "👋 **Walaikum Assalam!**\n\n"
-            "Main theek hoon! Aap batayein main aapki timer ya study session me kya madad kar sakta hoon?\n\n"
-            "- *'Timer kaise lagayein?'*\n"
-            "- *'Study ke liye best time kitna hai?'*\n"
-            "- *'Sound kyu nahi aa rahi?'*"
-        )
-
-    if any(k in q for k in ["sound", "audio", "awaaz", "alarm", "chime"]):
-        return (
-            "🔊 **Sound / Alarm ki Maloomat:**\n\n"
-            "- Jab timer 00:00:00 par pohnchta hai to pyari si bell chime bajti hai.\n"
-            "- **Tip:** Browser security ki wajah se page par kam az kam ek dafa **Start** button click hona zaroori hai taake browser sound allow kare."
-        )
-
-    if any(k in q for k in ["preset", "buttons", "modes", "study", "work", "pomodoro"]):
-        return (
-            "🎯 **Aasaan Timer Presets:**\n\n"
-            "1. **Study / Work (25 min):** Har 25 minute baad 5 minute ka break lein (ise Pomodoro technique kehte hain).\n"
-            "2. **Chai Break (5 min):** Paani peene aur fresh hone ke liye.\n"
-            "3. **Long Break (15 min):** Kuch der araam karne ke liye.\n"
-            "4. **Deep Focus (45 min):** Lamba kaam ya exam preparation ke liye."
-        )
-
-    if any(k in q for k in ["kaise", "how to", "use", "chale"]):
-        return (
-            "⏱️ **Timer Use Karna Bohot Aasaan Hai:**\n\n"
-            "1. Screen par kisi bhi button par click karein (jaise *'Study (25 min)'*).\n"
-            "2. **Green START** button dabayein, countdown shuru ho jayega!\n"
-            "3. Kaam rokna ho to **PAUSE** dabayein, shuru se chalana ho to **RESET** dabayein."
-        )
-
-    return (
-        f"🤖 **ChronoFlow Assistant:**\n\n"
-        f"Aapne poocha: *\"{query}\"*\n\n"
-        f"Aap timer ko screen par buttons ke zariye aasaani se control kar sakte hain. "
-        f"Agar koi aur sawal ho to zaroor poochein, main 24/7 yahin mojood hoon!"
-    )
-
-
-# ---------------------------------------------------------
-# App Header (High Visibility)
+# App Header (Responsive & Clean)
 # ---------------------------------------------------------
 st.markdown(
     """
@@ -383,22 +303,22 @@ st.markdown(
 )
 
 # ---------------------------------------------------------
-# Quick Stats (Clean & High Contrast)
+# Quick Stats (Clean, High Contrast & Always 1 Row on Mobile)
 # ---------------------------------------------------------
 s1, s2, s3 = st.columns(3)
 with s1:
-    st.metric("Total Focus Time", f"{(st.session_state.completed_count * 25)} mins")
+    st.metric("Total Focus Time", f"{(st.session_state.completed_count * 25)}m")
 with s2:
-    st.metric("Missions Completed", f"{st.session_state.completed_count} ✅")
+    st.metric("Missions Done", f"{st.session_state.completed_count} ✅")
 with s3:
     st.metric("Assistant Status", "Online 🟢")
 
-st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 1-Click Fast Presets (Large, High Contrast Buttons)
+# 1-Click Fast Presets (Responsive 2x2 Grid on Mobile)
 # ---------------------------------------------------------
-st.markdown("<h4 style='text-align: center; font-size: 1.15rem; color: #f1f5f9; font-weight: 700; margin-bottom: 12px;'>⚡ Quick Presets (1-Click me time set karein)</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; font-size: 1.05rem; color: #f1f5f9; font-weight: 700; margin-bottom: 10px;'>⚡ Quick Presets (1-Click me set karein)</h4>", unsafe_allow_html=True)
 p1, p2, p3, p4 = st.columns(4)
 
 with p1:
@@ -407,7 +327,7 @@ with p1:
         st.rerun()
 
 with p2:
-    if st.button("☕ Chai Break (5m)", use_container_width=True):
+    if st.button("☕ Chai (5m)", use_container_width=True):
         set_timer(5 * 60, "Chai Break")
         st.rerun()
 
@@ -422,210 +342,213 @@ with p4:
         st.rerun()
 
 # ---------------------------------------------------------
-# Clean, High-Contrast Circular Timer HUD
+# Clean, High-Contrast Circular Timer HUD + Pinned Corner Chatbot Launcher
 # ---------------------------------------------------------
-hud_html = f"""
+hud_template = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@700&display=swap');
 
-    * {{
+    * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
         user-select: none;
-    }}
+    }
 
-    body {{
+    body {
         background: transparent;
         color: #ffffff;
         font-family: 'Plus Jakarta Sans', sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 6px 0;
-    }}
+        padding: 4px 0;
+    }
 
-    .timer-card {{
+    .timer-card {
         width: 100%;
-        max-width: 560px;
+        max-width: 520px;
         background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
         border: 2px solid #334155;
-        border-radius: 28px;
-        padding: 26px 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border-radius: 24px;
+        padding: 20px 14px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }}
+    }
 
-    .task-badge {{
+    .task-badge {
         background: rgba(99, 102, 241, 0.25);
         border: 1.5px solid #818cf8;
         color: #ffffff;
-        padding: 8px 20px;
+        padding: 6px 18px;
         border-radius: 50px;
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         font-weight: 700;
-        margin-bottom: 16px;
+        margin-bottom: 12px;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-    }}
+    }
 
-    .circle-wrap {{
+    .circle-wrap {
         position: relative;
-        width: 260px;
-        height: 260px;
-        margin: 6px 0 16px 0;
+        width: clamp(210px, 58vw, 250px);
+        height: clamp(210px, 58vw, 250px);
+        margin: 4px 0 14px 0;
         display: flex;
         justify-content: center;
         align-items: center;
-    }}
+    }
 
-    svg {{
+    svg {
         transform: rotate(-90deg);
         width: 100%;
         height: 100%;
-    }}
+    }
 
-    circle {{
+    circle {
         fill: none;
         stroke-width: 13;
         stroke-linecap: round;
-    }}
+    }
 
-    .circle-bg {{
+    .circle-bg {
         stroke: #334155;
-    }}
+    }
 
-    .circle-progress {{
+    .circle-progress {
         stroke: #6366f1;
         stroke-dasharray: 753.9; /* 2 * PI * 120 */
         stroke-dashoffset: 0;
         transition: stroke-dashoffset 0.3s ease, stroke 0.3s ease;
         filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6));
-    }}
+    }
 
-    .circle-progress.paused {{
+    .circle-progress.paused {
         stroke: #f59e0b;
         filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
-    }}
+    }
 
-    .circle-progress.completed {{
+    .circle-progress.completed {
         stroke: #10b981;
         filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8));
-    }}
+    }
 
-    .timer-readout {{
+    .timer-readout {
         position: absolute;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-    }}
+    }
 
-    .time-digits {{
+    .time-digits {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 3.5rem;
+        font-size: clamp(2.8rem, 8.5vw, 3.4rem);
         font-weight: 700;
         color: #ffffff;
         letter-spacing: -0.02em;
         line-height: 1;
         text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }}
+    }
 
-    .status-text {{
-        font-size: 0.9rem;
+    .status-text {
+        font-size: 0.85rem;
         color: #cbd5e1;
         font-weight: 700;
-        margin-top: 10px;
+        margin-top: 8px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-    }}
+    }
 
-    .controls-row {{
+    .controls-row {
         display: flex;
-        gap: 14px;
+        gap: 12px;
         width: 100%;
         justify-content: center;
-        margin-top: 10px;
+        margin-top: 8px;
         flex-wrap: wrap;
-    }}
+    }
 
-    button.btn-action {{
-        padding: 14px 28px;
-        border-radius: 14px;
+    button.btn-action {
+        padding: 12px 24px;
+        border-radius: 12px;
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-weight: 800;
-        font-size: 1rem;
+        font-size: 0.95rem;
         cursor: pointer;
         border: none;
         transition: all 0.2s ease;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-    }}
+    }
 
-    button.btn-start {{
+    button.btn-start {
         background: #10b981;
         color: #ffffff;
         box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45);
-    }}
+    }
 
-    button.btn-start:hover {{
+    button.btn-start:hover {
         background: #059669;
         transform: translateY(-2px);
-    }}
+    }
 
-    button.btn-pause {{
+    button.btn-pause {
         background: #f59e0b;
         color: #ffffff;
         box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
-    }}
+    }
 
-    button.btn-pause:hover {{
+    button.btn-pause:hover {
         background: #d97706;
         transform: translateY(-2px);
-    }}
+    }
 
-    button.btn-reset {{
+    button.btn-reset {
         background: #334155;
         border: 1.5px solid #475569;
         color: #ffffff;
-    }}
+    }
 
-    button.btn-reset:hover {{
+    button.btn-reset:hover {
         background: #475569;
         transform: translateY(-2px);
-    }}
+    }
 
-    .bumps-row {{
+    .bumps-row {
         display: flex;
-        gap: 10px;
-        margin-top: 16px;
-    }}
+        gap: 8px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-    button.btn-bump {{
-        padding: 9px 18px;
-        border-radius: 10px;
-        font-size: 0.88rem;
+    button.btn-bump {
+        padding: 8px 14px;
+        border-radius: 9px;
+        font-size: 0.82rem;
         font-weight: 700;
         background: rgba(99, 102, 241, 0.25);
         border: 1.5px solid #818cf8;
         color: #ffffff;
         cursor: pointer;
         transition: all 0.2s ease;
-    }}
+    }
 
-    button.btn-bump:hover {{
+    button.btn-bump:hover {
         background: rgba(99, 102, 241, 0.45);
         transform: translateY(-1px);
-    }}
+    }
 </style>
 </head>
 <body>
@@ -633,7 +556,7 @@ hud_html = f"""
 <div class="timer-card">
     <div class="task-badge">
         <span>🎯</span>
-        <span>{st.session_state.task_name}</span>
+        <span>__TASK_NAME__</span>
     </div>
 
     <div class="circle-wrap">
@@ -666,7 +589,7 @@ hud_html = f"""
 </div>
 
 <script>
-    let totalDuration = {st.session_state.total_seconds};
+    let totalDuration = __TOTAL_SECONDS__;
     let remaining = totalDuration;
     let isRunning = false;
     let timerId = null;
@@ -683,17 +606,17 @@ hud_html = f"""
 
     // Web Audio Bell Chime
     let audioCtx = null;
-    function playChime() {{
-        try {{
-            if (!audioCtx) {{
+    function playChime() {
+        try {
+            if (!audioCtx) {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
-            }}
+            }
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // Sweet chord C-E-G-C
-            notes.forEach((freq, idx) => {{
-                setTimeout(() => {{
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                setTimeout(() => {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'triangle';
@@ -704,29 +627,29 @@ hud_html = f"""
                     gain.connect(audioCtx.destination);
                     osc.start();
                     osc.stop(audioCtx.currentTime + 0.8);
-                }}, idx * 180);
-            }});
-        }} catch(e) {{}}
-    }}
+                }, idx * 180);
+            });
+        } catch(e) {}
+    }
 
-    function formatTime(secs) {{
+    function formatTime(secs) {
         const h = Math.floor(secs / 3600);
         const m = Math.floor((secs % 3600) / 60);
         const s = secs % 60;
-        if (h > 0) {{
-            return `${{String(h).padStart(2, '0')}}:${{String(m).padStart(2, '0')}}:${{String(s).padStart(2, '0')}}`;
-        }}
-        return `${{String(m).padStart(2, '0')}}:${{String(s).padStart(2, '0')}}`;
-    }}
+        if (h > 0) {
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
 
-    function update() {{
+    function update() {
         display.innerText = formatTime(remaining);
         const ratio = totalDuration > 0 ? remaining / totalDuration : 0;
         circle.style.strokeDashoffset = CIRCLE_LENGTH * (1 - ratio);
-    }}
+    }
 
-    function toggleTimer() {{
-        if (isRunning) {{
+    function toggleTimer() {
+        if (isRunning) {
             // Pause
             clearInterval(timerId);
             isRunning = false;
@@ -736,7 +659,7 @@ hud_html = f"""
             btnText.innerText = "RESUME";
             statusLabel.innerText = "PAUSED";
             statusLabel.style.color = "#f59e0b";
-        }} else {{
+        } else {
             // Start
             if (remaining <= 0) remaining = totalDuration;
             isRunning = true;
@@ -747,11 +670,11 @@ hud_html = f"""
             statusLabel.innerText = "RUNNING";
             statusLabel.style.color = "#10b981";
 
-            timerId = setInterval(() => {{
-                if (remaining > 0) {{
+            timerId = setInterval(() => {
+                if (remaining > 0) {
                     remaining--;
                     update();
-                }} else {{
+                } else {
                     clearInterval(timerId);
                     isRunning = false;
                     circle.classList.add('completed');
@@ -761,12 +684,12 @@ hud_html = f"""
                     statusLabel.innerText = "TIME'S UP! ⏰";
                     statusLabel.style.color = "#10b981";
                     playChime();
-                }}
-            }}, 1000);
-        }}
-    }}
+                }
+            }, 1000);
+        }
+    }
 
-    function resetTimer() {{
+    function resetTimer() {
         clearInterval(timerId);
         isRunning = false;
         remaining = totalDuration;
@@ -777,24 +700,417 @@ hud_html = f"""
         statusLabel.innerText = "READY";
         statusLabel.style.color = "#cbd5e1";
         update();
-    }}
+    }
 
-    function addSeconds(sec) {{
+    function addSeconds(sec) {
         totalDuration += sec;
         remaining += sec;
         update();
-    }}
+    }
 
     update();
+
+    // ========================================================
+    // PINNED CORNER FLOATING CHATBOT ATTACHED TO SCREEN CORNER
+    // ========================================================
+    function setupCornerChatbot() {
+        try {
+            const pdoc = window.parent.document;
+            if (!pdoc || !pdoc.body) return;
+
+            // If already created, skip duplicate
+            if (pdoc.getElementById('chronoflow-corner-chatbot')) return;
+
+            const wrap = pdoc.createElement('div');
+            wrap.id = 'chronoflow-corner-chatbot';
+
+            wrap.innerHTML = `
+            <style>
+                #cf-chat-launcher {
+                    position: fixed;
+                    bottom: 22px;
+                    right: 22px;
+                    z-index: 2147483647;
+                    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+                    color: #ffffff;
+                    border-radius: 50px;
+                    padding: 12px 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    box-shadow: 0 10px 28px rgba(79, 70, 229, 0.65), 0 0 16px rgba(124, 58, 237, 0.4);
+                    border: 2px solid rgba(255, 255, 255, 0.25);
+                    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+                    font-size: 0.96rem;
+                    font-weight: 700;
+                    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+                    user-select: none;
+                }
+
+                #cf-chat-launcher:hover {
+                    transform: translateY(-3px) scale(1.04);
+                    box-shadow: 0 14px 35px rgba(79, 70, 229, 0.85);
+                }
+
+                .cf-online-indicator {
+                    width: 9px;
+                    height: 9px;
+                    background-color: #10b981;
+                    border-radius: 50%;
+                    box-shadow: 0 0 8px #10b981;
+                    display: inline-block;
+                    animation: cfPulse 2s infinite;
+                }
+
+                @keyframes cfPulse {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.6; transform: scale(1.2); }
+                }
+
+                #cf-chat-window {
+                    position: fixed;
+                    bottom: 84px;
+                    right: 22px;
+                    width: 380px;
+                    max-height: 520px;
+                    z-index: 2147483647;
+                    background: #0f172a;
+                    border: 2px solid #6366f1;
+                    border-radius: 20px;
+                    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+                    display: none;
+                    flex-direction: column;
+                    overflow: hidden;
+                    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+                    color: #ffffff;
+                    animation: cfSlideUp 0.25s ease forwards;
+                }
+
+                @keyframes cfSlideUp {
+                    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+
+                .cf-chat-header {
+                    padding: 13px 16px;
+                    background: #1e293b;
+                    border-bottom: 1.5px solid #334155;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .cf-header-title {
+                    font-weight: 800;
+                    font-size: 1.02rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    color: #ffffff;
+                }
+
+                .cf-header-badge {
+                    font-size: 0.72rem;
+                    background: rgba(16, 185, 129, 0.2);
+                    border: 1px solid #10b981;
+                    color: #10b981;
+                    padding: 2px 7px;
+                    border-radius: 999px;
+                    font-weight: 700;
+                }
+
+                .cf-chat-close {
+                    background: transparent;
+                    border: none;
+                    color: #94a3b8;
+                    font-size: 1.25rem;
+                    cursor: pointer;
+                    padding: 4px 8px;
+                    border-radius: 8px;
+                    transition: all 0.2s;
+                    line-height: 1;
+                }
+
+                .cf-chat-close:hover {
+                    color: #ffffff;
+                    background: #334155;
+                }
+
+                .cf-chat-chips {
+                    display: flex;
+                    gap: 6px;
+                    padding: 8px 12px;
+                    overflow-x: auto;
+                    white-space: nowrap;
+                    background: #0f172a;
+                    border-bottom: 1px solid #1e293b;
+                    scrollbar-width: thin;
+                }
+
+                .cf-chat-chip {
+                    background: rgba(99, 102, 241, 0.18);
+                    border: 1px solid #6366f1;
+                    color: #e2e8f0;
+                    font-size: 0.76rem;
+                    font-weight: 700;
+                    padding: 5px 11px;
+                    border-radius: 50px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    flex-shrink: 0;
+                }
+
+                .cf-chat-chip:hover {
+                    background: #6366f1;
+                    color: #ffffff;
+                    transform: translateY(-1px);
+                }
+
+                .cf-chat-messages {
+                    padding: 14px;
+                    flex: 1;
+                    overflow-y: auto;
+                    max-height: 310px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .cf-msg {
+                    max-width: 88%;
+                    padding: 10px 14px;
+                    border-radius: 14px;
+                    font-size: 0.88rem;
+                    line-height: 1.45;
+                    word-break: break-word;
+                }
+
+                .cf-msg-bot {
+                    align-self: flex-start;
+                    background: #1e293b;
+                    border: 1px solid #334155;
+                    color: #f8fafc;
+                    border-bottom-left-radius: 4px;
+                }
+
+                .cf-msg-user {
+                    align-self: flex-end;
+                    background: #4f46e5;
+                    color: #ffffff;
+                    border-bottom-right-radius: 4px;
+                }
+
+                .cf-chat-footer {
+                    padding: 10px 14px;
+                    background: #1e293b;
+                    border-top: 1.5px solid #334155;
+                    display: flex;
+                    gap: 8px;
+                }
+
+                .cf-chat-input {
+                    flex: 1;
+                    background: #0f172a;
+                    border: 1.5px solid #475569;
+                    border-radius: 10px;
+                    padding: 9px 12px;
+                    color: #ffffff;
+                    font-size: 0.88rem;
+                    outline: none;
+                    font-family: inherit;
+                }
+
+                .cf-chat-input:focus {
+                    border-color: #818cf8;
+                }
+
+                .cf-chat-send {
+                    background: #10b981;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 10px;
+                    padding: 9px 14px;
+                    font-weight: 700;
+                    font-size: 0.86rem;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                    font-family: inherit;
+                }
+
+                .cf-chat-send:hover {
+                    background: #059669;
+                }
+
+                @media (max-width: 640px) {
+                    #cf-chat-launcher {
+                        bottom: 16px !important;
+                        right: 16px !important;
+                        width: 52px !important;
+                        height: 52px !important;
+                        padding: 0 !important;
+                        border-radius: 50% !important;
+                        justify-content: center !important;
+                    }
+                    .cf-launcher-text {
+                        display: none !important;
+                    }
+                    .cf-online-indicator {
+                        position: absolute !important;
+                        top: 4px !important;
+                        right: 4px !important;
+                        width: 10px !important;
+                        height: 10px !important;
+                    }
+                    #cf-chat-window {
+                        bottom: 76px !important;
+                        right: 12px !important;
+                        left: 12px !important;
+                        width: auto !important;
+                        max-width: calc(100vw - 24px) !important;
+                        max-height: 72vh !important;
+                    }
+                }
+            </style>
+
+            <div id="cf-chat-launcher" title="24/7 AI Assistant">
+                <span style="font-size: 1.25rem;">💬</span>
+                <span class="cf-launcher-text">AI Assistant</span>
+                <span class="cf-online-indicator"></span>
+            </div>
+
+            <div id="cf-chat-window">
+                <div class="cf-chat-header">
+                    <div class="cf-header-title">
+                        <span>🤖</span>
+                        <span>ChronoFlow Assistant</span>
+                        <span class="cf-header-badge">● 24/7 Live</span>
+                    </div>
+                    <button class="cf-chat-close" id="cf-close-btn" title="Band Karein">✕</button>
+                </div>
+
+                <div class="cf-chat-chips">
+                    <div class="cf-chat-chip" data-q="Timer kaise chalayein?">⏱️ Timer Tips</div>
+                    <div class="cf-chat-chip" data-q="Study schedule tips?">🧠 Study Tips</div>
+                    <div class="cf-chat-chip" data-q="Pomodoro technique kya hai?">⚡ Pomodoro</div>
+                    <div class="cf-chat-chip" data-q="Sound ya alarm ki maloomat?">🔊 Alarm Sound</div>
+                </div>
+
+                <div class="cf-chat-messages" id="cf-msgs">
+                    <div class="cf-msg cf-msg-bot">
+                        👋 <b>Assalam o Alaikum! Main aapka 24/7 AI Assistant hoon.</b><br><br>
+                        Aap mujhse timer use karne, study schedule banane, ya kisi bhi feature ke baare me pooch sakte hain!
+                    </div>
+                </div>
+
+                <div class="cf-chat-footer">
+                    <input class="cf-chat-input" id="cf-input" placeholder="Apna sawal yahan likhein..." autocomplete="off" />
+                    <button class="cf-chat-send" id="cf-send">Send 🚀</button>
+                </div>
+            </div>
+            `;
+
+            pdoc.body.appendChild(wrap);
+
+            const launcher = pdoc.getElementById('cf-chat-launcher');
+            const chatWin = pdoc.getElementById('cf-chat-window');
+            const closeBtn = pdoc.getElementById('cf-close-btn');
+            const inputField = pdoc.getElementById('cf-input');
+            const sendBtn = pdoc.getElementById('cf-send');
+            const msgsBox = pdoc.getElementById('cf-msgs');
+
+            launcher.onclick = () => {
+                if (chatWin.style.display === 'flex') {
+                    chatWin.style.display = 'none';
+                } else {
+                    chatWin.style.display = 'flex';
+                    setTimeout(() => inputField && inputField.focus(), 150);
+                }
+            };
+
+            closeBtn.onclick = () => {
+                chatWin.style.display = 'none';
+            };
+
+            function getReply(query) {
+                const q = query.toLowerCase().trim();
+                if (q.includes('salam') || q.includes('hello') || q.includes('hi') || q.includes('kese') || q.includes('kaise ho')) {
+                    return "👋 <b>Walaikum Assalam!</b> Main bilkul theek hoon! Aap batayein aaj kaunsa study ya focus session start karna hai? 🎯";
+                }
+                if (q.includes('sound') || q.includes('audio') || q.includes('awaaz') || q.includes('alarm') || q.includes('bell')) {
+                    return "🔊 <b>Sound Maloomat:</b> Countdown 0 par pohnchne par bell bajti hai.<br><b>Tip:</b> Browser security policy ke mutabiq pehle ek baar screen par START dabana zaroori hai.";
+                }
+                if (q.includes('preset') || q.includes('pomodoro') || q.includes('technique')) {
+                    return "⚡ <b>Pomodoro Technique:</b> 25 minute parhai karein aur phir 5 minute Chai Break lein. Isse bina thakey lambe time tak focus barkarar rehta hai!";
+                }
+                if (q.includes('kaise') || q.includes('use') || q.includes('chale') || q.includes('start')) {
+                    return "⏱️ <b>Timer Use Karna Aasaan Hai:</b><br>1. Koi sa preset chunein (jaise Study 25m).<br>2. Green <b>START</b> dabayein.<br>3. Rokne ke liye Pause aur shuru se lagane ke liye Reset dabayein!";
+                }
+                if (q.includes('study') || q.includes('schedule') || q.includes('tips') || q.includes('parh')) {
+                    return "🧠 <b>Top Focus Tip:</b> Apne notifications mute karein, <b>'Deep Focus (45m)'</b> preset lagayein, aur ek target complete karein bina kisi distraction ke!";
+                }
+                return `🤖 <b>ChronoFlow Assistant:</b> Aapka sawal <i>"${query}"</i> note kar liya! Screen ke buttons se timer control karein ya koi aur sawal ho to poochein!`;
+            }
+
+            function addMsg(txt, isUser) {
+                const el = pdoc.createElement('div');
+                el.className = isUser ? 'cf-msg cf-msg-user' : 'cf-msg cf-msg-bot';
+                el.innerHTML = txt;
+                msgsBox.appendChild(el);
+                msgsBox.scrollTop = msgsBox.scrollHeight;
+            }
+
+            function sendUserMsg() {
+                const v = inputField.value.trim();
+                if (!v) return;
+                addMsg(v, true);
+                inputField.value = '';
+                setTimeout(() => {
+                    const ans = getReply(v);
+                    addMsg(ans, false);
+                }, 280);
+            }
+
+            sendBtn.onclick = sendUserMsg;
+            inputField.onkeydown = (e) => {
+                if (e.key === 'Enter') sendUserMsg();
+            };
+
+            const chips = pdoc.querySelectorAll('.cf-chat-chip');
+            chips.forEach(c => {
+                c.onclick = () => {
+                    const q = c.getAttribute('data-q');
+                    addMsg(q, true);
+                    setTimeout(() => {
+                        const ans = getReply(q);
+                        addMsg(ans, false);
+                    }, 280);
+                };
+            });
+
+        } catch(e) {
+            console.error("Corner chatbot error:", e);
+        }
+    }
+
+    // Run setup after slight delay to ensure parent document is ready
+    setTimeout(setupCornerChatbot, 200);
 </script>
 </body>
 </html>
 """
 
-components.html(hud_html, height=450, scrolling=False)
+# Populate dynamic variables into template
+hud_final = (
+    hud_template
+    .replace("__TASK_NAME__", st.session_state.task_name)
+    .replace("__TOTAL_SECONDS__", str(st.session_state.total_seconds))
+)
+
+components.html(hud_final, height=440, scrolling=False)
 
 # ---------------------------------------------------------
-# Custom Time Input (High Contrast, Crystal Clear)
+# Custom Time Input (High Contrast, Responsive)
 # ---------------------------------------------------------
 with st.expander("🛠️ Custom Time Set Karein (Apni marzi ka waqt)", expanded=False):
     t_tab1, t_tab2 = st.tabs(["🔢 Number Input", "✍️ Likh Kar Set Karein"])
@@ -802,7 +1118,7 @@ with st.expander("🛠️ Custom Time Set Karein (Apni marzi ka waqt)", expanded
     with t_tab1:
         c1, c2, c3 = st.columns(3)
         with c1:
-            inp_h = st.number_input("Ghante (Hours)", 0, 23, st.session_state.total_seconds // 3600)
+            inp_h = st.number_input("Ghante", 0, 23, st.session_state.total_seconds // 3600)
         with c2:
             inp_m = st.number_input("Minutes", 0, 59, (st.session_state.total_seconds % 3600) // 60)
         with c3:
@@ -832,7 +1148,7 @@ with st.expander("🛠️ Custom Time Set Karein (Apni marzi ka waqt)", expanded
 # ---------------------------------------------------------
 # Completed Session Logger (Clear & Legible)
 # ---------------------------------------------------------
-st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 with st.container():
     col_l1, col_l2 = st.columns([3, 1])
     with col_l1:
@@ -852,73 +1168,11 @@ with st.container():
             st.rerun()
 
 # ---------------------------------------------------------
-# TRUE FLOATING CORNER CHATBOT (Bottom-Right Website Widget)
-# ---------------------------------------------------------
-with st.popover("💬 Chat ● Online", use_container_width=False):
-    st.markdown(
-        """
-        <div style="border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 14px;">
-            <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff !important; display: flex; align-items: center; gap: 8px;">
-                <span>💬</span>
-                <span style="color: #ffffff !important;">ChronoFlow Assistant</span>
-                <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; color: #10b981 !important; padding: 2px 8px; border-radius: 999px;">● Online</span>
-            </div>
-            <p style="font-size: 0.85rem; color: #cbd5e1 !important; margin: 4px 0 0 0;">
-                Main aapka 24/7 live helper hoon. Kuch bhi poochein!
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Quick Suggestion Chips
-    c_chip1, c_chip2 = st.columns(2)
-    with c_chip1:
-        if st.button("⏱️ Timer kaise chalayein?", use_container_width=True):
-            user_q = "Timer kaise chalayein?"
-            st.session_state.chat_messages.append({"role": "user", "content": user_q})
-            ans = get_corner_chat_reply(user_q)
-            st.session_state.chat_messages.append({"role": "assistant", "content": ans})
-            st.rerun()
-
-    with c_chip2:
-        if st.button("🧠 Study ke tips?", use_container_width=True):
-            user_q = "Study ke tips?"
-            st.session_state.chat_messages.append({"role": "user", "content": user_q})
-            ans = get_corner_chat_reply(user_q)
-            st.session_state.chat_messages.append({"role": "assistant", "content": reply if 'reply' in locals() else ans})
-            st.rerun()
-
-    # Chat Messages Box (High Contrast)
-    with st.container(height=260):
-        for msg in st.session_state.chat_messages:
-            with st.chat_message(msg["role"]):
-                st.markdown(f"<div style='color: #ffffff !important; font-weight: 500;'>{msg['content']}</div>", unsafe_allow_html=True)
-
-    # Chat Form Input
-    with st.form("corner_chat_form", clear_on_submit=True):
-        chat_col_in, chat_col_btn = st.columns([4, 1])
-        with chat_col_in:
-            user_input = st.text_input(
-                "Message...",
-                placeholder="Apna sawal yahan likhein...",
-                label_visibility="collapsed",
-            )
-        with chat_col_btn:
-            send_clicked = st.form_submit_button("Send 🚀")
-
-        if send_clicked and user_input.strip():
-            st.session_state.chat_messages.append({"role": "user", "content": user_input})
-            reply = get_corner_chat_reply(user_input)
-            st.session_state.chat_messages.append({"role": "assistant", "content": reply})
-            st.rerun()
-
-# ---------------------------------------------------------
 # Clean Minimal Footer
 # ---------------------------------------------------------
 st.markdown(
     """
-    <div style="text-align: center; margin-top: 30px; padding: 16px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">
+    <div style="text-align: center; margin-top: 24px; padding: 14px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">
         <span>ChronoFlow Timer &bull; Simple, Modern & Fast</span>
     </div>
     """,
